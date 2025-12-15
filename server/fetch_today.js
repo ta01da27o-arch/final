@@ -1,41 +1,41 @@
 import axios from "axios";
-import { saveJSON } from "./save.js";
+import fs from "fs-extra";
 
-const TODAY_API =
+const API =
   "https://boatraceopenapi.github.io/previews/v2/today.json";
 
-function todayYMD() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}${m}${day}`;
-}
+const today = new Date()
+  .toISOString()
+  .slice(0, 10)
+  .replace(/-/g, "");
 
-async function fetchToday() {
-  const date = todayYMD();
-  console.log("📅 本日:", date);
-  console.log("🔥 API:", TODAY_API);
+console.log(`📅 本日: ${today}`);
+console.log(`🔥 API: ${API}`);
 
-  const res = await axios.get(TODAY_API, { timeout: 15000 });
-  const json = res.data;
+async function main() {
+  const res = await axios.get(API, { timeout: 15000 });
+  const data = res.data;
 
-  if (!json || !json.data || json.data.length === 0) {
-    throw new Error("本日のレースデータが空です");
+  if (!Array.isArray(data) || data.length === 0) {
+    console.warn("⚠ 本日のレースデータは空でした（仕様）");
   }
 
-  const output = {
-    date,
-    source: "boatraceopenapi",
-    races: json.data
+  const out = {
+    date: today,
+    races: data || [],
   };
 
-  await saveJSON(`server/data/${date}.json`, output);
+  await fs.ensureDir("server/data");
+  await fs.writeJson(
+    `server/data/${today}.json`,
+    out,
+    { spaces: 2 }
+  );
 
-  console.log("✨ 本日のレースデータ取得完了");
+  console.log("💾 保存完了");
 }
 
-fetchToday().catch((err) => {
-  console.error("❌ 取得失敗:", err.message);
+main().catch((err) => {
+  console.error("❌ 致命的エラー:", err.message);
   process.exit(1);
 });
