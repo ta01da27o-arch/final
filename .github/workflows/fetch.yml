@@ -8,33 +8,21 @@ on:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # ★ npm ci → npm install に変更（最重要）
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
+      - run: npm run install-browsers
+      - run: npm run fetch
 
-      # Playwright 使用のため必須
-      - name: Install Playwright browsers
-        run: npm run install-browsers
-
-      # 本日のフルデータ取得
-      - name: Run fetch script
-        run: npm run fetch
-
-      # 取得データを自動コミット
       - name: Commit data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add server/data || true
+          git add server/data
           git commit -m "update today race data" || echo "no changes"
-          git push || echo "push skipped"
+          git push
