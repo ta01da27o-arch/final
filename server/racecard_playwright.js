@@ -4,8 +4,7 @@ import * as cheerio from "cheerio";
 export async function fetchRacecard(url) {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-
-  await page.goto(url, {
+  await page.goto(`https://www.boatrace.jp${url}`, {
     waitUntil: "networkidle",
     timeout: 60000
   });
@@ -16,11 +15,12 @@ export async function fetchRacecard(url) {
   const $ = cheerio.load(html);
   const racers = [];
 
-  $(".is-racer").each((_, el) => {
+  $(".is-racer").each((i, el) => {
     racers.push({
-      course: $(el).find(".is-course").text().trim(),
+      lane: i + 1,
       name: $(el).find(".is-name").text().trim(),
-      class: $(el).find(".is-class").text().trim()
+      rank: $(el).find(".is-class").text().trim(),
+      regno: $(el).find(".is-number").text().trim()
     });
   });
 

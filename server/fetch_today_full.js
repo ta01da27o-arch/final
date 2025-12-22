@@ -1,43 +1,26 @@
-import { fetchTodayPreview } from "./preview_api.js";
+import { fetchTodayStadiums } from "./index_playwright.js";
+import { fetchRaceList } from "./racelist_playwright.js";
 import { fetchRacecard } from "./racecard_playwright.js";
-import { mergeRace } from "./merge.js";
 import { saveJSON } from "./save.js";
 
-const today = new Date()
-  .toISOString()
-  .slice(0, 10)
-  .replace(/-/g, "");
+const date = new Date().toISOString().slice(0,10).replace(/-/g,"");
+console.log(`📅 本日: ${date}`);
 
-console.log(`📅 本日: ${today}`);
+const stadiums = await fetchTodayStadiums(date);
+const result = { date, stadiums: [] };
 
-const previews = await fetchTodayPreview();
+for (const jcd of stadiums) {
+  console.log(`🏟 jcd=${jcd}`);
+  const races = await fetchRaceList(jcd, date);
+  const raceData = [];
 
-if (!previews.length) {
-  console.log("⚠ 本日開催レースなし（仕様）");
-  await saveJSON(`server/data/${today}.json`, { date: today, races: [] });
-  process.exit(0);
+  for (const link of races) {
+    const racers = await fetchRacecard(link);
+    raceData.push({ link, racers });
+  }
+
+  result.stadiums.push({ jcd, races: raceData });
 }
 
-const results = [];
-
-for (const p of previews) {
-  const jcd = String(p.race_stadium_number).padStart(2, "0");
-  const rno = p.race_number;
-
-  console.log(`🏁 ${jcd}R${rno} 出走表取得中…`);
-
-  const racecard = await fetchRacecard({
-    jcd,
-    date: today,
-    rno
-  });
-
-  results.push(mergeRace(p, racecard));
-}
-
-await saveJSON(`server/data/${today}.json`, {
-  date: today,
-  races: results
-});
-
-console.log("✨ 本日フルデータ取得完了");
+await saveJSON(`server/data/${date}.json`, result);
+console.log("✨ 本日の全レース取得完了");
