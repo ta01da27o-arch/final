@@ -1,22 +1,25 @@
 import { chromium } from "playwright";
 
 export async function fetchTodayStadiums(date) {
-  const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
 
-  const stadiums = await page.evaluate(() => {
-    return Array.from(document.querySelectorAll(".is-arrow1"))
-      .map(a => a.getAttribute("href"))
-      .filter(Boolean)
-      .map(h => {
-        const m = h.match(/jcd=(\d+)/);
-        return m ? m[1] : null;
-      })
-      .filter(Boolean);
+  const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
+  console.log(`🌐 index: ${url}`);
+
+  await page.goto(url, {
+    waitUntil: "domcontentloaded", // ← networkidle禁止
+    timeout: 90000
   });
 
+  const venues = await page.$$eval(".is-venue", (nodes) =>
+    nodes.map((el) => ({
+      jcd: el.getAttribute("data-jcd"),
+      name: el.querySelector(".is-name")?.textContent.trim()
+    }))
+  );
+
   await browser.close();
-  return [...new Set(stadiums)];
+
+  return venues.filter(v => v.jcd);
 }
