@@ -1,16 +1,24 @@
-// Node.js v18+ / v20 では fetch はグローバルに存在する
-
 export async function fetchTodayStadiums(date) {
   const url = `https://www.boatrace.jp/owpc/pc/data/race/index.json?hd=${date}`;
   console.log(`🌐 index json: ${url}`);
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Accept": "application/json"
+    }
+  });
 
-  if (!res.ok) {
-    throw new Error(`index.json 取得失敗 status=${res.status}`);
+  const text = await res.text();
+
+  // デバッグ保険
+  if (text.startsWith("<")) {
+    throw new Error("JSONではなくHTML/XMLが返されました");
   }
 
-  const json = await res.json();
+  const json = JSON.parse(text);
 
   if (!json.raceIndex || json.raceIndex.length === 0) {
     console.log("⚠️ 本日開催場なし");
