@@ -1,61 +1,42 @@
-import { fetchTodayStadiums } from "./index_playwright.js";
-import { fetchRaceList } from "./racelist_playwright.js";
+import { fetchTodayFromOpenAPI } from "./openapi_today.js";
 import { fetchRacecard } from "./racecard_playwright.js";
 import { saveJSON } from "./save.js";
 
-/**
- * JST固定の日付取得
- */
-function getJSTDate() {
-  const now = new Date();
-  now.setHours(now.getHours() + 9);
-  return now.toISOString().slice(0, 10).replace(/-/g, "");
+function todayJST() {
+  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return d.toISOString().slice(0, 10).replace(/-/g, "");
 }
 
-async function main() {
-  const today = getJSTDate();
-  console.log(`📅 本日(JST): ${today}`);
+const date = todayJST();
+console.log(`📅 本日(JST): ${date}`);
 
-  const result = {
-    date: today,
-    venues: []
-  };
+const previews = await fetchTodayFromOpenAPI();
 
-  // ① 本日開催場取得
-  const stadiums = await fetchTodayStadiums(today);
+const venues = {};
 
-  for (const venue of stadiums) {
-    console.log(`🏟 開催場: ${venue.name} (${venue.jcd})`);
+for (const p of previews) {
+  const jcd = String(p.race_stadium_number).padStart(2, "0");
+  const rno = p.race_number;
 
-    const races = [];
-
-    // ② 各レース一覧
-    const raceList = await fetchRaceList(venue.jcd, today);
-
-    for (const race of raceList) {
-      console.log(`  ▶ R${race.raceNo} 出走表取得`);
-
-      const racers = await fetchRacecard(race.url);
-
-      races.push({
-        raceNo: race.raceNo,
-        url: race.url,
-        racers
-      });
-    }
-
-    result.venues.push({
-      jcd: venue.jcd,
-      name: venue.name,
-      races
-    });
+  if (!venues[jcd]) {
+    venues[jcd] = { stadium: jcd, races: [] };
   }
 
-  await saveJSON(`server/data/${today}.json`, result);
-  console.log("✨ 本日の全レースデータ取得完了");
+  console.log(`🏁 取得: 場=${jcd} R=${rno}`);
+
+  const racers = await fetchRacecard(jcd, rno, date);
+
+  venues[jcd].races.push({
+    race_number: rno,
+    racers
+  });
 }
 
-main().catch((e) => {
-  console.error("❌ FATAL:", e);
-  process.exit(1);
-});
+const result = {
+  date,
+  venues: Object.values(venues)
+};
+
+await saveJSON(`server/data/${date}.json`, result);
+
+console.log("✨ 本日フルデータ取得完了");
