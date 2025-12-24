@@ -1,21 +1,26 @@
-export async function fetchTodayStadiums(date) {
-  const url = `https://www.boatrace.jp/owpc/pc/data/race/index.json?hd=${date}`;
-  console.log(`🌐 index json: ${url}`);
+import { chromium } from "playwright";
 
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Accept": "application/json"
-    }
+export async function fetchTodayStadiums(date) {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+
+  // ① 先にトップページを踏む（Cookie確立）
+  await page.goto("https://www.boatrace.jp/owpc/pc/race/index", {
+    waitUntil: "domcontentloaded"
   });
+
+  // ② 内部APIをブラウザコンテキストで叩く
+  const apiUrl = `https://www.boatrace.jp/owpc/pc/data/race/index.json?hd=${date}`;
+  console.log(`🌐 index json (playwright): ${apiUrl}`);
+
+  const res = await page.request.get(apiUrl);
 
   const text = await res.text();
 
-  // デバッグ保険
+  await browser.close();
+
   if (text.startsWith("<")) {
-    throw new Error("JSONではなくHTML/XMLが返されました");
+    throw new Error("HTMLが返却されました（Cookie未確立）");
   }
 
   const json = JSON.parse(text);
