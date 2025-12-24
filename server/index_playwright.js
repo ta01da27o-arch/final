@@ -7,18 +7,29 @@ export async function fetchTodayStadiums(date) {
   const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
   console.log(`🌐 index: ${url}`);
 
-  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.goto(url, {
+    waitUntil: "domcontentloaded",
+    timeout: 60000
+  });
 
-  await page.waitForSelector(".race-index__stadium", { timeout: 60000 });
-
+  // ★ waitForSelectorは使わない（これが重要）
   const stadiums = await page.$$eval(
-    ".race-index__stadium",
+    "[data-jcd]",
     els =>
-      els
-        .map(el => el.getAttribute("data-jcd"))
-        .filter(Boolean)
+      [...new Set(
+        els
+          .map(el => el.getAttribute("data-jcd"))
+          .filter(jcd => /^\d+$/.test(jcd))
+      )]
   );
 
   await browser.close();
+
+  if (stadiums.length === 0) {
+    console.log("⚠️ 本日は開催場なし");
+    return [];
+  }
+
+  console.log(`🏟 開催場: ${stadiums.join(", ")}`);
   return stadiums;
 }

@@ -12,8 +12,18 @@ async function main() {
   const date = todayJST();
   console.log(`📅 本日(JST): ${date}`);
 
-  const venues = [];
   const stadiums = await fetchTodayStadiums(date);
+
+  if (stadiums.length === 0) {
+    await saveJSON(`server/data/${date}.json`, {
+      date,
+      venues: []
+    });
+    console.log("✅ 正常終了（開催なし）");
+    return;
+  }
+
+  const venues = [];
 
   for (const jcd of stadiums) {
     const races = [];
