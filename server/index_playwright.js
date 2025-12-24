@@ -2,34 +2,39 @@ import { chromium } from "playwright";
 
 export async function fetchTodayStadiums(date) {
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    locale: "ja-JP",
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+  });
+  const page = await context.newPage();
 
-  const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
-  console.log(`🌐 index: ${url}`);
-
-  await page.goto(url, {
+  // ① Cookie確立（最重要）
+  await page.goto("https://www.boatrace.jp/owpc/pc/", {
     waitUntil: "domcontentloaded",
-    timeout: 60000
+    timeout: 60000,
   });
 
-  // ★ waitForSelectorは使わない（これが重要）
-  const stadiums = await page.$$eval(
-    "[data-jcd]",
-    els =>
-      [...new Set(
-        els
-          .map(el => el.getAttribute("data-jcd"))
-          .filter(jcd => /^\d+$/.test(jcd))
-      )]
-  );
+  // ② index.json を Playwright Request で取得
+  const jsonUrl = `https://www.boatrace.jp/owpc/pc/data/race/index.json?hd=${date}`;
+  console.log(`🌐 index json: ${jsonUrl}`);
+
+  const res = await context.request.get(jsonUrl);
+
+  const contentType = res.headers()["content-type"] || "";
+  if (!contentType.includes("application/json")) {
+    const body = await res.text();
+    await browser.close();
+    throw new Error("index.json が JSON として取得できません");
+  }
+
+  const data = await res.json();
 
   await browser.close();
 
-  if (stadiums.length === 0) {
-    console.log("⚠️ 本日は開催場なし");
-    return [];
-  }
+  // ③ 開催場コード抽出
+  const stadiums = Object.keys(data || {}).filter(k => /^\d+$/.test(k));
 
-  console.log(`🏟 開催場: ${stadiums.join(", ")}`);
+  console.log(`🏟 開催場数: ${stadiums.length}`);
   return stadiums;
 }
