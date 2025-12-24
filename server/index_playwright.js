@@ -1,43 +1,25 @@
-import { chromium } from "playwright";
+import fetch from "node-fetch";
 
 export async function fetchTodayStadiums(date) {
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox"]
-  });
+  const url = `https://www.boatrace.jp/owpc/pc/data/race/index.json?hd=${date}`;
+  console.log(`🌐 index json: ${url}`);
 
-  const page = await browser.newPage();
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("index.json の取得に失敗");
+  }
 
-  const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
-  console.log(`🌐 index: ${url}`);
+  const json = await res.json();
 
-  await page.goto(url, {
-    waitUntil: "load",
-    timeout: 90000
-  });
+  /*
+    json.raceIndex
+      └ 開催場のみ入っている
+  */
 
-  // ★ ここが重要：開催場カードが出るまで待つ
-  await page.waitForSelector(".race-index__stadium", {
-    timeout: 60000
-  });
-
-  const venues = await page.$$eval(
-    ".race-index__stadium",
-    (nodes) =>
-      nodes.map((el) => {
-        const link = el.querySelector("a");
-        const href = link?.getAttribute("href") || "";
-
-        const match = href.match(/jcd=(\d+)/);
-
-        return {
-          jcd: match ? match[1] : null,
-          name: el.querySelector(".race-index__stadium-name")?.textContent.trim()
-        };
-      }).filter(v => v.jcd)
-  );
-
-  await browser.close();
+  const venues = json.raceIndex.map(v => ({
+    jcd: v.jcd,
+    name: v.stadiumName
+  }));
 
   console.log(`✅ 開催場数: ${venues.length}`);
   return venues;
