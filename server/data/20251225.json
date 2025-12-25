@@ -1,4 +1,705 @@
 {
   "date": "20251225",
-  "venues": []
+  "venues": {
+    "10": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "11": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "12": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "13": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "15": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "16": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "17": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "18": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "20": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "22": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "03": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "07": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "08": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ],
+    "09": [
+      {
+        "race": 1,
+        "racers": []
+      },
+      {
+        "race": 2,
+        "racers": []
+      },
+      {
+        "race": 3,
+        "racers": []
+      },
+      {
+        "race": 4,
+        "racers": []
+      },
+      {
+        "race": 5,
+        "racers": []
+      },
+      {
+        "race": 6,
+        "racers": []
+      },
+      {
+        "race": 7,
+        "racers": []
+      },
+      {
+        "race": 8,
+        "racers": []
+      },
+      {
+        "race": 9,
+        "racers": []
+      },
+      {
+        "race": 10,
+        "racers": []
+      },
+      {
+        "race": 11,
+        "racers": []
+      },
+      {
+        "race": 12,
+        "racers": []
+      }
+    ]
+  }
 }
