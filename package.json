@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "fetch": "node server/fetch_today_full.js",
-    "install-browsers": "playwright install --with-deps chromium"
+    "install-browsers": "npx playwright install chromium"
   },
   "dependencies": {
-    "playwright": "^1.41.0"
+    "playwright": "^1.41.2",
+    "cheerio": "^1.0.0-rc.12"
   }
 }
