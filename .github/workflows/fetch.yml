@@ -1,9 +1,9 @@
-name: Fetch Boat Race Full Data
+name: Fetch Boat Race Full HTML
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 0 * * *" # JST 9:05
+    - cron: "5 0 * * *"
 
 jobs:
   fetch:
@@ -24,5 +24,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add server/data
-          git commit -m "update today race data" || echo "no changes"
+          git commit -m "update race data" || echo "no changes"
           git push
