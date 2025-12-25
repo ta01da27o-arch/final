@@ -4,11 +4,9 @@
   "type": "module",
   "scripts": {
     "fetch": "node server/fetch_today_full.js",
-    "install-browsers": "playwright install chromium"
+    "install-browsers": "playwright install --with-deps chromium"
   },
   "dependencies": {
-    "playwright": "^1.41.0",
-    "cheerio": "^1.0.0-rc.12",
-    "fs-extra": "^11.2.0"
+    "playwright": "^1.41.0"
   }
 }
