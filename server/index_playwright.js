@@ -1,26 +1,24 @@
+import { chromium } from "playwright";
+
 export async function fetchTodayStadiums(date) {
-  const url = `https://www.boatrace.jp/owpc/sp/data/race/index.json?hd=${date}`;
-  console.log(`🌐 index json (SP): ${url}`);
+  const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
+  console.log(`🌐 index HTML: ${url}`);
 
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-      "Accept": "application/json"
-    }
-  });
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
-  const text = await res.text();
+  await page.waitForSelector(".race-index__stadium", { timeout: 60000 });
 
-  if (!text.trim().startsWith("{")) {
-    throw new Error("SP index.json が JSON として取得できません");
-  }
+  const stadiums = await page.$$eval(".race-index__stadium", nodes =>
+    nodes.map(n => ({
+      name: n.querySelector(".race-index__stadium-name")?.textContent.trim(),
+      no: n.getAttribute("data-stadium"),
+      url: "https://www.boatrace.jp" +
+        n.querySelector("a")?.getAttribute("href")
+    }))
+  );
 
-  const json = JSON.parse(text);
-
-  // 開催場コード抽出
-  const stadiums = Object.keys(json || {}).filter(k => /^\d+$/.test(k));
-
-  console.log(`🏟 開催場数: ${stadiums.length}`);
-  return stadiums;
+  await browser.close();
+  return stadiums.filter(s => s.url);
 }

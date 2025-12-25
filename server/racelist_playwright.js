@@ -1,23 +1,17 @@
 import { chromium } from "playwright";
 
-export async function fetchRaceList(date, jcd) {
+export async function fetchRaceList(stadiumUrl) {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  await page.goto(stadiumUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
 
-  const url = `https://www.boatrace.jp/owpc/pc/race/racelist?hd=${date}&jcd=${jcd}`;
-  console.log(`📋 racelist: ${url}`);
+  await page.waitForSelector(".race-list__race-number", { timeout: 60000 });
 
-  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
-
-  const races = await page.$$eval(
-    ".race-list__item",
-    els =>
-      els
-        .map(el => el.getAttribute("data-rno"))
-        .filter(Boolean)
-        .map(n => Number(n))
+  const raceNumbers = await page.$$eval(
+    ".race-list__race-number",
+    nodes => nodes.map(n => Number(n.textContent.replace("R", "")))
   );
 
   await browser.close();
-  return races;
+  return raceNumbers;
 }
