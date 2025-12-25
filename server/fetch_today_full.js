@@ -1,44 +1,53 @@
-import { fetchTodayStadiums } from "./index_playwright.js";
-import { fetchRaceList } from "./racelist_playwright.js";
-import { fetchRaceCard } from "./racecard_playwright.js";
+import { fetchTodayPreview } from "./preview_api.js";
+import { fetchRacecard } from "./racecard_playwright.js";
 import { saveJSON } from "./save.js";
 
-function todayJST() {
-  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  return d.toISOString().slice(0, 10).replace(/-/g, "");
+function getJSTDate() {
+  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return now.toISOString().slice(0, 10).replace(/-/g, "");
 }
 
-(async () => {
-  const date = todayJST();
+async function main() {
+  const date = getJSTDate();
   console.log(`📅 本日(JST): ${date}`);
 
-  const stadiums = await fetchTodayStadiums(date);
+  const previews = await fetchTodayPreview();
 
-  if (stadiums.length === 0) {
-    console.log("⚠️ 本日は開催場なし");
-    await saveJSON(date, { date, venues: [] });
+  if (previews.length === 0) {
+    await saveJSON(`server/data/${date}.json`, {
+      date,
+      venues: []
+    });
+    console.log("⚠️ 本日は開催なし");
     return;
   }
 
-  const venues = [];
+  const venues = {};
 
-  for (const stadium of stadiums) {
-    const races = [];
+  for (const p of previews) {
+    const jcd = String(p.race_stadium_number).padStart(2, "0");
+    const rno = p.race_number;
 
-    const raceNumbers = await fetchRaceList(stadium.url);
-    for (const rno of raceNumbers) {
-      const raceUrl = `${stadium.url}&rno=${rno}`;
-      const card = await fetchRaceCard(raceUrl);
-      races.push({ race: rno, racers: card });
-    }
+    venues[jcd] ??= [];
+    const racers = await fetchRacecard({ jcd, rno, date });
 
-    venues.push({
-      stadium: stadium.name,
-      stadium_no: stadium.no,
-      races
+    venues[jcd].push({
+      race: rno,
+      racers
     });
+
+    console.log(`✅ ${jcd} R${rno} 取得完了`);
   }
 
-  await saveJSON(date, { date, venues });
-  console.log("✅ 全レース取得完了");
-})();
+  await saveJSON(`server/data/${date}.json`, {
+    date,
+    venues
+  });
+
+  console.log("🎉 本日の全レース取得完了");
+}
+
+main().catch(e => {
+  console.error("❌ FATAL:", e.message);
+  process.exit(1);
+});
