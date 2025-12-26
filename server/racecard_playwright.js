@@ -1,5 +1,4 @@
 import { chromium } from "playwright";
-import * as cheerio from "cheerio";
 
 export async function fetchRacecard({ jcd, rno, date }) {
   const url =
@@ -14,43 +13,33 @@ export async function fetchRacecard({ jcd, rno, date }) {
   });
 
   const page = await context.newPage();
-  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
-  const html = await page.content();
-  await browser.close();
+  let raceJson = null;
 
-  const $ = cheerio.load(html);
-  const racers = [];
-
-  /* ========= パターン①：旧 table 構造 ========= */
-  $(".table1 tbody tr").each((_, tr) => {
-    const tds = $(tr).find("td");
-    if (tds.length < 6) return;
-
-    racers.push({
-      lane: $(tds[0]).text().trim(),
-      name: $(tds[2]).text().trim(),
-      class: $(tds[3]).text().trim(),
-      branch: $(tds[4]).text().trim(),
-      age: $(tds[5]).text().trim()
-    });
+  /* 🔑 出走表APIをフック */
+  page.on("response", async (res) => {
+    const url = res.url();
+    if (url.includes("/api/racecard")) {
+      try {
+        raceJson = await res.json();
+      } catch {}
+    }
   });
 
-  /* ========= パターン②：年末SP div構造 ========= */
-  if (racers.length === 0) {
-    $(".tableRace .is-fs12").each((_, row) => {
-      const cols = $(row).find("div");
-      if (cols.length < 5) return;
+  await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
 
-      racers.push({
-        lane: $(cols[0]).text().trim(),
-        name: $(cols[1]).text().trim(),
-        class: $(cols[2]).text().trim(),
-        branch: $(cols[3]).text().trim(),
-        age: $(cols[4]).text().trim()
-      });
-    });
+  await browser.close();
+
+  if (!raceJson || !raceJson.syussou) {
+    return [];
   }
 
-  return racers;
+  /* JSON → racers */
+  return raceJson.syussou.map((r) => ({
+    lane: r.teiban,
+    name: r.sensyu_name,
+    class: r.kyu,
+    branch: r.shibu_name,
+    age: r.age
+  }));
 }
