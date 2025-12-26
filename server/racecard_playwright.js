@@ -14,20 +14,15 @@ export async function fetchRacecard({ jcd, rno, date }) {
   });
 
   const page = await context.newPage();
+  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
-  await page.goto(url, {
-    waitUntil: "domcontentloaded",
-    timeout: 60000
-  });
-
-  // ❌ waitForSelector は使わない（不安定）
   const html = await page.content();
-
   await browser.close();
 
   const $ = cheerio.load(html);
   const racers = [];
 
+  /* ========= パターン①：旧 table 構造 ========= */
   $(".table1 tbody tr").each((_, tr) => {
     const tds = $(tr).find("td");
     if (tds.length < 6) return;
@@ -40,6 +35,22 @@ export async function fetchRacecard({ jcd, rno, date }) {
       age: $(tds[5]).text().trim()
     });
   });
+
+  /* ========= パターン②：年末SP div構造 ========= */
+  if (racers.length === 0) {
+    $(".tableRace .is-fs12").each((_, row) => {
+      const cols = $(row).find("div");
+      if (cols.length < 5) return;
+
+      racers.push({
+        lane: $(cols[0]).text().trim(),
+        name: $(cols[1]).text().trim(),
+        class: $(cols[2]).text().trim(),
+        branch: $(cols[3]).text().trim(),
+        age: $(cols[4]).text().trim()
+      });
+    });
+  }
 
   return racers;
 }
