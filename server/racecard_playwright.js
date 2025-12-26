@@ -15,14 +15,10 @@ export async function fetchRacecard({ jcd, rno, date }) {
 
   const page = await context.newPage();
 
+  // API拾えたらラッキー（拾えなくてOK）
   let apiData = null;
-
-  // APIが来たら拾う（来なくてもOK）
   page.on("response", async res => {
-    if (
-      res.url().includes("/api/racecard") &&
-      res.status() === 200
-    ) {
+    if (res.url().includes("/api/racecard") && res.status() === 200) {
       try {
         apiData = await res.json();
       } catch {}
@@ -34,10 +30,10 @@ export async function fetchRacecard({ jcd, rno, date }) {
     timeout: 60000
   });
 
-  // 描画完了を待つ（ここが最重要）
-  await page.waitForSelector(".table1", { timeout: 30000 });
+  // ⛔ waitForSelector は使わない
+  await page.waitForTimeout(1500);
 
-  // ✅ API優先
+  // API優先
   if (apiData?.syussou) {
     await browser.close();
     return apiData.syussou.map(r => ({
@@ -49,20 +45,24 @@ export async function fetchRacecard({ jcd, rno, date }) {
     }));
   }
 
-  // ✅ フォールバック：HTMLスクレイピング
+  // HTMLフォールバック
   const html = await page.content();
   await browser.close();
 
   const $ = cheerio.load(html);
   const racers = [];
 
-  $(".table1 tbody tr").each((_, tr) => {
+  // 複数パターン対応（これが最強）
+  $(".table1 tbody tr, .is-racer, .race-table tbody tr").each((_, tr) => {
     const tds = $(tr).find("td");
-    if (tds.length < 6) return;
+    if (tds.length < 4) return;
+
+    const name = $(tds[2]).text().trim();
+    if (!name) return;
 
     racers.push({
       lane: $(tds[0]).text().trim(),
-      name: $(tds[2]).text().trim(),
+      name,
       class: $(tds[3]).text().trim()
     });
   });
