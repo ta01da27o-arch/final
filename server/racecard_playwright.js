@@ -2,8 +2,8 @@ import { chromium } from "playwright";
 
 export async function fetchRacecard({ jcd, rno, date }) {
   const url =
-    `https://www.boatrace.jp/owpc/sp/race/racecard?` +
-    `rno=${rno}&jcd=${jcd}&hd=${date}`;
+    `https://www.boatrace.jp/owpc/sp/race/racecard` +
+    `?rno=${rno}&jcd=${jcd}&hd=${date}`;
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
@@ -16,26 +16,27 @@ export async function fetchRacecard({ jcd, rno, date }) {
 
   let raceJson = null;
 
-  /* 🔑 出走表APIをフック */
-  page.on("response", async (res) => {
-    const url = res.url();
-    if (url.includes("/api/racecard")) {
-      try {
-        raceJson = await res.json();
-      } catch {}
-    }
+  // 🔑 出走表APIだけを待つ
+  const waitApi = page.waitForResponse(
+    res =>
+      res.url().includes("/api/racecard") &&
+      res.status() === 200,
+    { timeout: 30000 }
+  );
+
+  await page.goto(url, {
+    waitUntil: "domcontentloaded",
+    timeout: 60000
   });
 
-  await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
+  const res = await waitApi;
+  raceJson = await res.json();
 
   await browser.close();
 
-  if (!raceJson || !raceJson.syussou) {
-    return [];
-  }
+  if (!raceJson?.syussou) return [];
 
-  /* JSON → racers */
-  return raceJson.syussou.map((r) => ({
+  return raceJson.syussou.map(r => ({
     lane: r.teiban,
     name: r.sensyu_name,
     class: r.kyu,
