@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import * as cheerio from "cheerio";
 
 export async function fetchRacecard({ jcd, rno, date }) {
   const url =
@@ -14,33 +15,57 @@ export async function fetchRacecard({ jcd, rno, date }) {
 
   const page = await context.newPage();
 
-  let raceJson = null;
+  let apiData = null;
 
-  // 🔑 出走表APIだけを待つ
-  const waitApi = page.waitForResponse(
-    res =>
+  // APIが来たら拾う（来なくてもOK）
+  page.on("response", async res => {
+    if (
       res.url().includes("/api/racecard") &&
-      res.status() === 200,
-    { timeout: 30000 }
-  );
+      res.status() === 200
+    ) {
+      try {
+        apiData = await res.json();
+      } catch {}
+    }
+  });
 
   await page.goto(url, {
     waitUntil: "domcontentloaded",
     timeout: 60000
   });
 
-  const res = await waitApi;
-  raceJson = await res.json();
+  // 描画完了を待つ（ここが最重要）
+  await page.waitForSelector(".table1", { timeout: 30000 });
 
+  // ✅ API優先
+  if (apiData?.syussou) {
+    await browser.close();
+    return apiData.syussou.map(r => ({
+      lane: r.teiban,
+      name: r.sensyu_name,
+      class: r.kyu,
+      branch: r.shibu_name,
+      age: r.age
+    }));
+  }
+
+  // ✅ フォールバック：HTMLスクレイピング
+  const html = await page.content();
   await browser.close();
 
-  if (!raceJson?.syussou) return [];
+  const $ = cheerio.load(html);
+  const racers = [];
 
-  return raceJson.syussou.map(r => ({
-    lane: r.teiban,
-    name: r.sensyu_name,
-    class: r.kyu,
-    branch: r.shibu_name,
-    age: r.age
-  }));
+  $(".table1 tbody tr").each((_, tr) => {
+    const tds = $(tr).find("td");
+    if (tds.length < 6) return;
+
+    racers.push({
+      lane: $(tds[0]).text().trim(),
+      name: $(tds[2]).text().trim(),
+      class: $(tds[3]).text().trim()
+    });
+  });
+
+  return racers;
 }
