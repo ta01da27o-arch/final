@@ -1,28 +1,54 @@
-name: Fetch Boat Race Full
+name: 今日のボートレースフル取得
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 0 * * *" # JST 9:05
+    - cron: "5 0 * * *" # JST 09:05
+
+permissions:
+  contents: write
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # ★重要（rebase に必須）
+
+      - name: Node.js セットアップ
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - run: npm install
-      - run: npm run install-browsers
-      - run: npm run fetch
+      - name: npm install
+        run: npm ci
 
-      - name: Commit data
+      - name: 今日のレース取得
+        run: npm run fetch
+
+      # ===== 正解ルートここから =====
+
+      - name: Git 設定
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add server/data
-          git commit -m "update race data" || echo "no changes"
-          git push
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: 最新の main を rebase で取り込む
+        run: |
+          git pull --rebase origin main
+
+      - name: 変更があれば commit
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git add server/data/*.json
+            git commit -m "レースデータを更新"
+          else
+            echo "変更なし（commit スキップ）"
+          fi
+
+      - name: push
+        run: |
+          git push origin main
