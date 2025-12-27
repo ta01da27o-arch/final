@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: リポジトリをチェックアウト
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -23,9 +23,12 @@ jobs:
         with:
           node-version: 20
 
-      # 🔽 npm ci → npm install に変更（ここが修正点）
       - name: npm install
         run: npm install
+
+      # 🔴 これが不足していた致命点
+      - name: Playwright Chromium インストール
+        run: npx playwright install --with-deps chromium
 
       - name: 今日のレース取得
         run: npm run fetch
@@ -37,7 +40,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: 最新 main を rebase で取り込む
+      - name: 最新 main を取り込む
         run: |
           git pull --rebase origin main
 
@@ -51,5 +54,4 @@ jobs:
           fi
 
       - name: push
-        run: |
-          git push origin main
+        run: git push origin main
