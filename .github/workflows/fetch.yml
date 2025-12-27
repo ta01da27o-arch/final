@@ -16,27 +16,28 @@ jobs:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # ★重要（rebase に必須）
+          fetch-depth: 0
 
       - name: Node.js セットアップ
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 🔽 npm ci → npm install に変更（ここが修正点）
       - name: npm install
-        run: npm ci
+        run: npm install
 
       - name: 今日のレース取得
         run: npm run fetch
 
-      # ===== 正解ルートここから =====
+      # ===== Git 正解ルート =====
 
       - name: Git 設定
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: 最新の main を rebase で取り込む
+      - name: 最新 main を rebase で取り込む
         run: |
           git pull --rebase origin main
 
@@ -46,7 +47,7 @@ jobs:
             git add server/data/*.json
             git commit -m "レースデータを更新"
           else
-            echo "変更なし（commit スキップ）"
+            echo "変更なし"
           fi
 
       - name: push
