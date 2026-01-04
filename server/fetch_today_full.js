@@ -1,3 +1,4 @@
+import { chromium } from "playwright";
 import { fetchRacecard } from "./racecard_playwright.js";
 import { saveJSON } from "./save.js";
 
@@ -10,16 +11,19 @@ async function main() {
   const date = todayJST();
   console.log(`📅 本日(JST): ${date}`);
 
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
   const venues = {};
 
-  // ★ 01〜24 を総当たり
   for (let jcd = 1; jcd <= 24; jcd++) {
     const jcdStr = String(jcd).padStart(2, "0");
     const races = [];
 
     for (let rno = 1; rno <= 12; rno++) {
       try {
-        const racers = await fetchRacecard({
+        const racers = await fetchRacecard(page, {
           date,
           jcd: jcdStr,
           rno
@@ -29,17 +33,17 @@ async function main() {
           console.log(`✅ ${jcdStr} R${rno} 取得完了`);
           races.push({ race: rno, racers });
         }
-      } catch (e) {
+      } catch {
         console.log(`⚠️ ${jcdStr} R${rno} スキップ`);
       }
     }
 
-    // ★ 1Rでも取れたら開催場とみなす
     if (races.length > 0) {
       venues[jcdStr] = races;
     }
   }
 
+  await browser.close();
   await saveJSON(date, { date, venues });
 
   console.log("🎉 本日の全レース取得完了");
