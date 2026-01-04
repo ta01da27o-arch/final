@@ -1,57 +1,28 @@
-name: 今日のボートレースフル取得
+name: Fetch Boat Race Full (Bruteforce)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 0 * * *" # JST 09:05
-
-permissions:
-  contents: write
+    - cron: "5 0 * * *" # JST 9:05
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Node.js セットアップ
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: npm install
-        run: npm install
+      - run: npm install
+      - run: npx playwright install chromium
+      - run: npm run fetch
 
-      # 🔴 これが不足していた致命点
-      - name: Playwright Chromium インストール
-        run: npx playwright install --with-deps chromium
-
-      - name: 今日のレース取得
-        run: npm run fetch
-
-      # ===== Git 正解ルート =====
-
-      - name: Git 設定
+      - name: Commit data
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: 最新 main を取り込む
-        run: |
-          git pull --rebase origin main
-
-      - name: 変更があれば commit
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git add server/data/*.json
-            git commit -m "レースデータを更新"
-          else
-            echo "変更なし"
-          fi
-
-      - name: push
-        run: git push origin main
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add server/data
+          git commit -m "update today race data" || echo "no changes"
+          git push
