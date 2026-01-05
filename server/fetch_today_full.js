@@ -1,96 +1,52 @@
-import { chromium } from "playwright";
 import fs from "fs";
 import path from "path";
+import { todayJST } from "./util_date.js";
+import { fetchRace } from "./fetch_race.js";
 
-const DATA_DIR = "./server/data";
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+const DATE = todayJST();
+console.log(`📅 本日(JST): ${DATE}`);
 
-function todayJST() {
-  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  return now.toISOString().slice(0, 10).replace(/-/g, "");
+const DATA_DIR = "server/data";
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-async function main() {
-  const date = todayJST();
-  console.log(`📅 本日(JST): ${date}`);
+const result = {
+  date: DATE,
+  venues: {}
+};
 
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+// ★ 正解：1〜24 全場総当たり
+for (let jcd = 1; jcd <= 24; jcd++) {
+  const code = String(jcd).padStart(2, "0");
+  result.venues[code] = [];
 
-  const indexUrl = `https://www.boatrace.jp/owpc/pc/race/index?hd=${date}`;
-  console.log(`🌐 index: ${indexUrl}`);
+  for (let rno = 1; rno <= 12; rno++) {
+    try {
+      const race = await fetchRace(DATE, code, rno);
 
-  await page.goto(indexUrl, { waitUntil: "domcontentloaded" });
-
-  // indexページは必ず存在する前提（Aルート）
-  const venues = {};
-
-  // 場コードは 01〜24 を総当たり（毎日仕様）
-  for (let v = 1; v <= 24; v++) {
-    const venueCode = String(v).padStart(2, "0");
-    venues[venueCode] = { races: [] };
-
-    for (let r = 1; r <= 12; r++) {
-      // racecard URL（存在しなくても失敗にしない）
-      const raceUrl =
-        `https://www.boatrace.jp/owpc/pc/race/racecard` +
-        `?hd=${date}&jcd=${venueCode}&rno=${r}`;
-
-      let raceData = {
-        race: r,
-        status: "not_ready",
-        racers: []
-      };
-
-      try {
-        const rp = await browser.newPage();
-        await rp.goto(raceUrl, {
-          waitUntil: "domcontentloaded",
-          timeout: 15000
-        });
-
-        // 出走表テーブルがある場合のみ取得
-        const rows = await rp.$$(".table1 tbody tr");
-
-        if (rows.length > 0) {
-          raceData.status = "ready";
-
-          for (const row of rows) {
-            const tds = await row.$$("td");
-            if (tds.length >= 4) {
-              const lane = (await tds[0].innerText()).trim();
-              const name = (await tds[2].innerText()).trim();
-              raceData.racers.push({ lane, name });
-            }
-          }
-        } else {
-          console.log(`ℹ️ ${venueCode} R${r} 出走表未確定`);
-        }
-
-        await rp.close();
-      } catch (e) {
-        console.log(`ℹ️ ${venueCode} R${r} 未公開`);
+      if (!race) {
+        console.log(`ℹ️ ${code} R${rno} 未公開`);
+      } else {
+        console.log(`✅ ${code} R${rno} 公開`);
       }
 
-      venues[venueCode].races.push(raceData);
+      result.venues[code].push({
+        race: rno,
+        published: !!race
+      });
+    } catch (e) {
+      console.log(`⚠️ ${code} R${rno} エラー`);
+      result.venues[code].push({
+        race: rno,
+        published: false
+      });
     }
   }
-
-  await browser.close();
-
-  const out = {
-    date,
-    venues
-  };
-
-  const outPath = path.join(DATA_DIR, `${date}.json`);
-  fs.writeFileSync(outPath, JSON.stringify(out, null, 2), "utf-8");
-
-  console.log(`💾 保存完了: ${outPath}`);
-  console.log("🎉 本日の全レース構造取得完了");
 }
 
-main().catch((e) => {
-  console.error("❌ FATAL:", e);
-  process.exit(1);
-});
+const filePath = path.join(DATA_DIR, `${DATE}.json`);
+fs.writeFileSync(filePath, JSON.stringify(result, null, 2), "utf8");
+
+console.log(`💾 保存完了: ${filePath}`);
+console.log("🎉 本日の全レース構造取得完了");
