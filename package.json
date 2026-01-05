@@ -1,12 +1,11 @@
 {
   "name": "boat-ai-fetcher",
   "version": "1.0.0",
-  "private": true,
   "type": "module",
   "scripts": {
     "fetch": "node server/fetch_today_full.js"
   },
   "dependencies": {
-    "playwright": "^1.42.0"
+    "node-fetch": "^3.3.2"
   }
 }
