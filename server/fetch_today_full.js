@@ -16,7 +16,7 @@ const result = {
   venues: {}
 };
 
-// ★ 正解：1〜24 全場総当たり
+// ★ 正解：1〜24 全場・無条件総当たり
 for (let jcd = 1; jcd <= 24; jcd++) {
   const code = String(jcd).padStart(2, "0");
   result.venues[code] = [];
@@ -25,21 +25,21 @@ for (let jcd = 1; jcd <= 24; jcd++) {
     try {
       const race = await fetchRace(DATE, code, rno);
 
-      if (!race) {
-        console.log(`ℹ️ ${code} R${rno} 未公開`);
+      if (race.exists) {
+        console.log(`✅ ${code} R${rno} 存在`);
       } else {
-        console.log(`✅ ${code} R${rno} 公開`);
+        console.log(`ℹ️ ${code} R${rno} 非存在`);
       }
 
       result.venues[code].push({
         race: rno,
-        published: !!race
+        exists: race.exists
       });
     } catch (e) {
-      console.log(`⚠️ ${code} R${rno} エラー`);
+      console.log(`⚠️ ${code} R${rno} 取得エラー`);
       result.venues[code].push({
         race: rno,
-        published: false
+        exists: false
       });
     }
   }
