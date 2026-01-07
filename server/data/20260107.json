@@ -4,1197 +4,1201 @@
     "10": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "11": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "12": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "13": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "14": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "15": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "16": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "17": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "18": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "19": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "20": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "21": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "22": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "23": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "24": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "01": [
       {
+        "race": 1,
+        "exists": false
+      },
+      {
         "race": 2,
-        "racers": []
+        "exists": false
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "02": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "03": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "04": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "05": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "06": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": false
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "07": [
       {
         "race": 1,
-        "racers": []
+        "exists": false
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "08": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ],
     "09": [
       {
         "race": 1,
-        "racers": []
+        "exists": true
       },
       {
         "race": 2,
-        "racers": []
+        "exists": true
       },
       {
         "race": 3,
-        "racers": []
+        "exists": true
       },
       {
         "race": 4,
-        "racers": []
+        "exists": true
       },
       {
         "race": 5,
-        "racers": []
+        "exists": true
       },
       {
         "race": 6,
-        "racers": []
+        "exists": true
       },
       {
         "race": 7,
-        "racers": []
+        "exists": true
       },
       {
         "race": 8,
-        "racers": []
+        "exists": true
       },
       {
         "race": 9,
-        "racers": []
+        "exists": true
       },
       {
         "race": 10,
-        "racers": []
+        "exists": true
       },
       {
         "race": 11,
-        "racers": []
+        "exists": true
       },
       {
         "race": 12,
-        "racers": []
+        "exists": true
       }
     ]
   }
