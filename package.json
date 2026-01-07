@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "fetch": "node server/fetch_today_full.js"
+    "fetch": "node server/fetch_today_full.js",
+    "install-browsers": "npx playwright install chromium"
   },
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "playwright": "^1.41.0",
+    "cheerio": "^1.0.0-rc.12"
   }
 }
