@@ -1,0 +1,27 @@
+name: 今日のボートレース構造取得
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "5 0 * * *" # JST 9:05
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+      - run: npx playwright install chromium
+      - run: npm run fetch
+
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add server/data
+          git commit -m "本日のレース構造を更新" || echo "no change"
+          git push
