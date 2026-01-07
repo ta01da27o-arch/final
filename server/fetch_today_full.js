@@ -1,52 +1,35 @@
-import fs from "fs";
-import path from "path";
-import { todayJST } from "./util_date.js";
-import { fetchRace } from "./fetch_race.js";
+import { fetchRaceStructure } from "./index_playwright.js";
+import { fetchRacecard } from "./racecard_playwright.js";
+import { saveJSON } from "./save.js";
 
-const DATE = todayJST();
-console.log(`📅 本日(JST): ${DATE}`);
-
-const DATA_DIR = "server/data";
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+function todayJST() {
+  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return d.toISOString().slice(0, 10).replace(/-/g, "");
 }
 
-const result = {
-  date: DATE,
-  venues: {}
-};
+(async () => {
+  const date = todayJST();
+  console.log(`📅 本日(JST): ${date}`);
 
-// ★ 正解：1〜24 全場・無条件総当たり
-for (let jcd = 1; jcd <= 24; jcd++) {
-  const code = String(jcd).padStart(2, "0");
-  result.venues[code] = [];
+  const structure = await fetchRaceStructure(date);
+  const result = { date, venues: {} };
 
-  for (let rno = 1; rno <= 12; rno++) {
-    try {
-      const race = await fetchRace(DATE, code, rno);
+  for (const [jcd, races] of Object.entries(structure)) {
+    const list = [];
 
-      if (race.exists) {
-        console.log(`✅ ${code} R${rno} 存在`);
-      } else {
-        console.log(`ℹ️ ${code} R${rno} 非存在`);
-      }
+    for (const r of races) {
+      if (!r.exists) continue;
 
-      result.venues[code].push({
-        race: rno,
-        exists: race.exists
-      });
-    } catch (e) {
-      console.log(`⚠️ ${code} R${rno} 取得エラー`);
-      result.venues[code].push({
-        race: rno,
-        exists: false
+      const racers = await fetchRacecard(date, jcd, r.race);
+      list.push({
+        race: r.race,
+        racers
       });
     }
+
+    if (list.length) result.venues[jcd] = list;
   }
-}
 
-const filePath = path.join(DATA_DIR, `${DATE}.json`);
-fs.writeFileSync(filePath, JSON.stringify(result, null, 2), "utf8");
-
-console.log(`💾 保存完了: ${filePath}`);
-console.log("🎉 本日の全レース構造取得完了");
+  saveJSON(date, result);
+  console.log("🎉 出走表取得完了");
+})();
