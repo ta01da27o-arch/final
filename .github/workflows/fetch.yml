@@ -1,0 +1,28 @@
+name: 今日のボートレースフル取得
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 0 * * *" # JST 9:15
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+      - run: npx playwright install --with-deps
+      - run: npm run fetch
+
+      - name: commit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add server/data/*.json
+          git commit -m "レース構造データ更新" || echo "no change"
+          git push
