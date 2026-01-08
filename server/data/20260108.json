@@ -754,8 +754,7 @@
     "01": [
       {
         "race": 1,
-        "exists": null,
-        "note": "fetch_error"
+        "exists": false
       },
       {
         "race": 2,
