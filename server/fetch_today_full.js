@@ -1,65 +1,46 @@
+import fs from "fs";
 import { chromium } from "playwright";
-import { getTodayJST, saveJSON } from "./utils.js";
+import { getTodayJST } from "./utils.js";
+import { fetchTodayVenues } from "./index_playwright.js";
+import { raceExists } from "./race_exists.js";
 
-const VENUES = Array.from({ length: 24 }, (_, i) =>
-  String(i + 1).padStart(2, "0")
-);
+const DATE = getTodayJST();
+const OUT = `server/data/${DATE}.json`;
 
 (async () => {
-  const date = getTodayJST();
-  console.log(`📅 本日(JST): ${date}`);
-
-  const result = {
-    date,
-    venues: {}
-  };
-
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
-  for (const jcd of VENUES) {
+  console.log(`📅 本日(JST): ${DATE}`);
+
+  const venues = await fetchTodayVenues(page, DATE);
+  const result = { date: DATE, venues: {} };
+
+  for (const jcd of venues) {
     result.venues[jcd] = [];
 
     for (let r = 1; r <= 12; r++) {
-      const url = `https://www.boatrace.jp/owpc/pc/race/racecard?rno=${r}&jcd=${jcd}&hd=${date}`;
-
       try {
-        const res = await page.goto(url, {
-          waitUntil: "domcontentloaded",
-          timeout: 20000
-        });
+        const exists = await raceExists(page, DATE, jcd, r);
+        result.venues[jcd].push({ race: r, exists });
 
-        if (!res || res.status() !== 200) {
-          console.log(`ℹ️ ${jcd} R${r} 未公開`);
-          result.venues[jcd].push({ race: r, exists: false });
-          continue;
-        }
-
-        const exists = await page.evaluate(() => {
-          return document.querySelector(".race_table_01") !== null;
-        });
-
-        if (exists) {
-          console.log(`✅ ${jcd} R${r} 存在`);
-          result.venues[jcd].push({ race: r, exists: true });
-        } else {
-          console.log(`ℹ️ ${jcd} R${r} 未公開`);
-          result.venues[jcd].push({ race: r, exists: false });
-        }
+        console.log(
+          exists
+            ? `✅ ${jcd} R${r} 存在`
+            : `ℹ️ ${jcd} R${r} 未公開`
+        );
       } catch (e) {
-        // ★A案の核心：エラー＝不存在にしない
-        console.log(`⚠️ ${jcd} R${r} エラー → null`);
-        result.venues[jcd].push({
-          race: r,
-          exists: null,
-          note: "fetch_error"
-        });
+        console.log(`⚠️ ${jcd} R${r} エラー`);
+        result.venues[jcd].push({ race: r, exists: false });
       }
     }
   }
 
   await browser.close();
 
-  saveJSON(date, result);
+  fs.mkdirSync("server/data", { recursive: true });
+  fs.writeFileSync(OUT, JSON.stringify(result, null, 2));
+
+  console.log(`💾 保存完了: ${OUT}`);
   console.log("🎉 本日の全レース構造取得完了");
 })();
