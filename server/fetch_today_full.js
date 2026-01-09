@@ -1,46 +1,50 @@
 import fs from "fs";
-import { chromium } from "playwright";
-import { getTodayJST } from "./utils.js";
+import path from "path";
 import { fetchTodayVenues } from "./index_playwright.js";
 import { raceExists } from "./race_exists.js";
+import { fetchRacecard } from "./racecard_playwright.js";
 
-const DATE = getTodayJST();
-const OUT = `server/data/${DATE}.json`;
+const todayJST = () => {
+  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return d.toISOString().slice(0, 10).replace(/-/g, "");
+};
 
-(async () => {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+const main = async () => {
+  const date = todayJST();
+  console.log(`📅 本日(JST): ${date}`);
 
-  console.log(`📅 本日(JST): ${DATE}`);
-
-  const venues = await fetchTodayVenues(page, DATE);
-  const result = { date: DATE, venues: {} };
+  const venues = await fetchTodayVenues(date);
+  const result = { date, venues: {} };
 
   for (const jcd of venues) {
     result.venues[jcd] = [];
 
     for (let r = 1; r <= 12; r++) {
-      try {
-        const exists = await raceExists(page, DATE, jcd, r);
-        result.venues[jcd].push({ race: r, exists });
-
-        console.log(
-          exists
-            ? `✅ ${jcd} R${r} 存在`
-            : `ℹ️ ${jcd} R${r} 未公開`
-        );
-      } catch (e) {
-        console.log(`⚠️ ${jcd} R${r} エラー`);
-        result.venues[jcd].push({ race: r, exists: false });
+      const exists = await raceExists(date, jcd, r);
+      if (!exists) {
+        console.log(`ℹ️ ${jcd} R${r} 未公開`);
+        continue;
       }
+
+      const racers = await fetchRacecard(date, jcd, r);
+      console.log(`✅ ${jcd} R${r} 出走表取得`);
+
+      result.venues[jcd].push({
+        race: r,
+        racers
+      });
     }
   }
 
-  await browser.close();
+  const dir = path.resolve("server/data");
+  fs.mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, `${date}.json`);
+  fs.writeFileSync(file, JSON.stringify(result, null, 2), "utf-8");
 
-  fs.mkdirSync("server/data", { recursive: true });
-  fs.writeFileSync(OUT, JSON.stringify(result, null, 2));
+  console.log(`💾 保存完了: ${file}`);
+};
 
-  console.log(`💾 保存完了: ${OUT}`);
-  console.log("🎉 本日の全レース構造取得完了");
-})();
+main().catch(e => {
+  console.error("❌ FATAL:", e);
+  process.exit(1);
+});
