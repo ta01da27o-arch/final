@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "fetch": "node server/fetch_today_full.js"
+    "fetch": "node server/fetch_today_full.js",
+    "install-browsers": "playwright install --with-deps"
   },
   "dependencies": {
     "playwright": "^1.41.2"
