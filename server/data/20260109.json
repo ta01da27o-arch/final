@@ -1,17 +1,749 @@
 {
   "date": "20260109",
   "venues": {
-    "10": [],
-    "13": [],
-    "15": [],
-    "16": [],
-    "17": [],
-    "19": [],
-    "20": [],
-    "23": [],
-    "04": [],
-    "06": [],
-    "07": [],
-    "09": []
+    "10": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "13": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "15": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "16": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "17": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "19": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "20": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "23": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "04": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "06": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "07": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ],
+    "09": [
+      {
+        "race": 1,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 2,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 3,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 4,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 5,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 6,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 7,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 8,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 9,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 10,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 11,
+        "exists": true,
+        "fetched": false
+      },
+      {
+        "race": 12,
+        "exists": true,
+        "fetched": false
+      }
+    ]
   }
 }
