@@ -8,13 +8,16 @@ export async function raceExists(date, jcd, rno) {
     `https://www.boatrace.jp/owpc/sp/race/racecard?rno=${rno}&jcd=${jcd}&hd=${date}`;
 
   try {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+    const res = await page.goto(url, {
+      waitUntil: "domcontentloaded",
+      timeout: 30000
+    });
 
-    // SP版は table 要素が必ず出る
-    const exists = await page.$("table") !== null;
-
+    const status = res.status();
     await browser.close();
-    return exists;
+
+    // ✅ 404 以外は「存在する」
+    return status !== 404;
   } catch (e) {
     await browser.close();
     return false;

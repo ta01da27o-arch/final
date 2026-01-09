@@ -1,50 +1,68 @@
 import fs from "fs";
 import path from "path";
-import { fetchTodayVenues } from "./index_playwright.js";
+import { getTodayVenues } from "./index_playwright.js";
 import { raceExists } from "./race_exists.js";
-import { fetchRacecard } from "./racecard_playwright.js";
 
-const todayJST = () => {
-  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  return d.toISOString().slice(0, 10).replace(/-/g, "");
-};
+const __dirname = new URL(".", import.meta.url).pathname;
 
-const main = async () => {
-  const date = todayJST();
+function getTodayJST() {
+  const now = new Date();
+  now.setHours(now.getHours() + 9);
+  return now.toISOString().slice(0, 10).replace(/-/g, "");
+}
+
+async function main() {
+  const date = getTodayJST();
   console.log(`📅 本日(JST): ${date}`);
 
-  const venues = await fetchTodayVenues(date);
-  const result = { date, venues: {} };
+  const venues = {};
+  const venueList = await getTodayVenues(date);
 
-  for (const jcd of venues) {
-    result.venues[jcd] = [];
+  console.log("🏟 開催場:", venueList.join(", "));
+
+  for (const jcd of venueList) {
+    venues[jcd] = [];
 
     for (let r = 1; r <= 12; r++) {
-      const exists = await raceExists(date, jcd, r);
-      if (!exists) {
-        console.log(`ℹ️ ${jcd} R${r} 未公開`);
-        continue;
+      try {
+        const exists = await raceExists(date, jcd, r);
+
+        if (exists) {
+          console.log(`✅ ${jcd} R${r} 存在`);
+        } else {
+          console.log(`⚠️ ${jcd} R${r} 存在しない`);
+        }
+
+        // 🔑 未公開でも必ず push
+        venues[jcd].push({
+          race: r,
+          exists,
+          fetched: false
+        });
+
+      } catch (e) {
+        console.log(`⚠️ ${jcd} R${r} エラー`);
+        venues[jcd].push({
+          race: r,
+          exists: false,
+          fetched: false
+        });
       }
-
-      const racers = await fetchRacecard(date, jcd, r);
-      console.log(`✅ ${jcd} R${r} 出走表取得`);
-
-      result.venues[jcd].push({
-        race: r,
-        racers
-      });
     }
   }
 
-  const dir = path.resolve("server/data");
-  fs.mkdirSync(dir, { recursive: true });
-  const file = path.join(dir, `${date}.json`);
-  fs.writeFileSync(file, JSON.stringify(result, null, 2), "utf-8");
+  const outDir = path.join(__dirname, "data");
+  fs.mkdirSync(outDir, { recursive: true });
 
-  console.log(`💾 保存完了: ${file}`);
-};
+  const outPath = path.join(outDir, `${date}.json`);
+  fs.writeFileSync(
+    outPath,
+    JSON.stringify({ date, venues }, null, 2),
+    "utf-8"
+  );
 
-main().catch(e => {
-  console.error("❌ FATAL:", e);
-  process.exit(1);
-});
+  console.log(`💾 保存完了: ${outPath}`);
+  console.log("🎉 本日の全レース構造取得完了");
+}
+
+main();
