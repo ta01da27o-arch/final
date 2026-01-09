@@ -12,7 +12,7 @@ console.log("📅 本日(JST):", date);
 const venues = await fetchTodayVenues(date);
 
 if (venues.length === 0) {
-  console.warn("⚠️ 本日開催場なし（取得失敗の可能性あり）");
+  console.warn("⚠️ 開催場が取得できませんでした（異常）");
 }
 
 const result = {
@@ -25,6 +25,12 @@ for (const jcd of venues) {
 
   for (let r = 1; r <= 12; r++) {
     const exists = await raceExists(date, jcd, r);
+    console.log(
+      exists
+        ? `✅ ${jcd} R${r} 存在`
+        : `ℹ️ ${jcd} R${r} 未公開`
+    );
+
     result.venues[jcd].push({
       race: r,
       exists
@@ -32,10 +38,8 @@ for (const jcd of venues) {
   }
 }
 
-const dir = "server/data";
-fs.mkdirSync(dir, { recursive: true });
-
-const file = path.join(dir, `${date}.json`);
+fs.mkdirSync("server/data", { recursive: true });
+const file = path.join("server/data", `${date}.json`);
 fs.writeFileSync(file, JSON.stringify(result, null, 2));
 
 console.log("💾 保存完了:", file);
