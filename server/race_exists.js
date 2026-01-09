@@ -5,14 +5,17 @@ export async function raceExists(date, jcd, rno) {
   const page = await browser.newPage();
 
   const url =
-    `https://www.boatrace.jp/owpc/pc/race/racecard?rno=${rno}&jcd=${jcd}&hd=${date}`;
+    `https://www.boatrace.jp/owpc/sp/race/racecard?rno=${rno}&jcd=${jcd}&hd=${date}`;
 
   try {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
-    const exists = await page.$(".table1") !== null;
+
+    // SP版は table 要素が必ず出る
+    const exists = await page.$("table") !== null;
+
     await browser.close();
     return exists;
-  } catch {
+  } catch (e) {
     await browser.close();
     return false;
   }
