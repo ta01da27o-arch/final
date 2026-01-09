@@ -1,68 +1,56 @@
 import fs from "fs";
 import path from "path";
+import { chromium } from "playwright";
 import { getTodayVenues } from "./index_playwright.js";
 import { raceExists } from "./race_exists.js";
+import { fetchRaceEntry } from "./race_entry.js";
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const JST_DATE = new Date().toLocaleDateString("sv-SE").replace(/-/g, "");
+const DATA_DIR = path.resolve("server/data");
+const FILE_PATH = path.join(DATA_DIR, `${JST_DATE}.json`);
 
-function getTodayJST() {
-  const now = new Date();
-  now.setHours(now.getHours() + 9);
-  return now.toISOString().slice(0, 10).replace(/-/g, "");
-}
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-async function main() {
-  const date = getTodayJST();
-  console.log(`📅 本日(JST): ${date}`);
+(async () => {
+  console.log(`📅 本日(JST): ${JST_DATE}`);
 
-  const venues = {};
-  const venueList = await getTodayVenues(date);
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
 
-  console.log("🏟 開催場:", venueList.join(", "));
+  const venues = await getTodayVenues(page, JST_DATE);
 
-  for (const jcd of venueList) {
-    venues[jcd] = [];
+  const result = { date: JST_DATE, venues: {} };
+
+  for (const jcd of venues) {
+    result.venues[jcd] = [];
 
     for (let r = 1; r <= 12; r++) {
-      try {
-        const exists = await raceExists(date, jcd, r);
+      const exists = await raceExists(page, JST_DATE, jcd, r);
 
-        if (exists) {
-          console.log(`✅ ${jcd} R${r} 存在`);
+      const raceObj = {
+        race: r,
+        exists,
+        fetched: false
+      };
+
+      if (exists) {
+        const entry = await fetchRaceEntry(page, JST_DATE, jcd, r);
+        if (entry) {
+          raceObj.entry = entry;
+          raceObj.fetched = true;
+          console.log(`✅ ${jcd} R${r} 出走表取得`);
         } else {
-          console.log(`⚠️ ${jcd} R${r} 存在しない`);
+          console.log(`⚠️ ${jcd} R${r} 出走表未公開`);
         }
-
-        // 🔑 未公開でも必ず push
-        venues[jcd].push({
-          race: r,
-          exists,
-          fetched: false
-        });
-
-      } catch (e) {
-        console.log(`⚠️ ${jcd} R${r} エラー`);
-        venues[jcd].push({
-          race: r,
-          exists: false,
-          fetched: false
-        });
       }
+
+      result.venues[jcd].push(raceObj);
     }
   }
 
-  const outDir = path.join(__dirname, "data");
-  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(FILE_PATH, JSON.stringify(result, null, 2));
+  console.log(`💾 保存完了: ${FILE_PATH}`);
+  console.log("🎉 出走表取得フェーズ完了");
 
-  const outPath = path.join(outDir, `${date}.json`);
-  fs.writeFileSync(
-    outPath,
-    JSON.stringify({ date, venues }, null, 2),
-    "utf-8"
-  );
-
-  console.log(`💾 保存完了: ${outPath}`);
-  console.log("🎉 本日の全レース構造取得完了");
-}
-
-main();
+  await browser.close();
+})();
