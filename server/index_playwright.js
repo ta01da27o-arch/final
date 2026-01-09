@@ -10,33 +10,30 @@ export async function fetchTodayVenues(date) {
   const url = `https://www.boatrace.jp/owpc/sp/race/index?hd=${date}`;
   console.log(`🌐 venues(sp): ${url}`);
 
+  // DOM 完了のみ待つ（selectorは一切待たない）
   await page.goto(url, {
-    waitUntil: "domcontentloaded", // ★ networkidle は使わない
+    waitUntil: "domcontentloaded",
     timeout: 30000,
   });
 
-  // 開催場リンクが描画されるまで待つ
-  await page.waitForSelector('a[href*="jcd="]', {
-    timeout: 20000,
-  });
+  // HTMLを直接取得
+  const html = await page.content();
 
-  const venues = await page.$$eval('a[href*="jcd="]', (els) =>
-    Array.from(
-      new Set(
-        els
-          .map((a) => {
-            const m = a.href.match(/jcd=(\d+)/);
-            return m ? m[1].padStart(2, "0") : null;
-          })
-          .filter(Boolean)
+  await browser.close();
+
+  // jcd=XX を全抽出
+  const venues = Array.from(
+    new Set(
+      [...html.matchAll(/jcd=(\d{1,2})/g)].map((m) =>
+        m[1].padStart(2, "0")
       )
     )
   );
 
-  await browser.close();
-
   if (venues.length === 0) {
-    console.warn("⚠️ 開催場が取得できませんでした");
+    console.warn("⚠️ 開催場が取得できません（HTML内にjcdなし）");
+  } else {
+    console.log(`🏟 開催場取得: ${venues.join(", ")}`);
   }
 
   return venues;
