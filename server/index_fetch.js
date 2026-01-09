@@ -1,10 +1,10 @@
 // server/index_fetch.js
-import fetch from "node-fetch";
 
 /**
  * 本日開催場を取得（PC HTML 直取得）
+ * Node.js v20 の標準 fetch を使用
  * @param {string} ymd YYYYMMDD
- * @returns {Promise<string[]>} ["01","10","24", ...]
+ * @returns {Promise<string[]>}
  */
 export async function fetchTodayVenues(ymd) {
   const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${ymd}`;
@@ -24,7 +24,7 @@ export async function fetchTodayVenues(ymd) {
 
   const html = await res.text();
 
-  // jcd=01 〜 24 を抽出
+  // jcd=01 ～ 24 抽出
   const matches = [...html.matchAll(/jcd=(\d{2})/g)];
   const venues = [...new Set(matches.map((m) => m[1]))];
 
