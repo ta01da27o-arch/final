@@ -3,10 +3,18 @@ import { chromium } from "playwright";
 import { fetchTodayVenues } from "./index_playwright.js";
 import { raceExists } from "./race_exists.js";
 
-const date = new Date()
-  .toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo" })
-  .replace(/\//g, "");
+// ✅ 正しい YYYYMMDD 生成
+function getTodayJST() {
+  const d = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" })
+  );
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}${m}${day}`;
+}
 
+const date = getTodayJST();
 console.log(`📅 本日(JST): ${date}`);
 
 const out = {
