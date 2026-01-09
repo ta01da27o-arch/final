@@ -1,24 +1,14 @@
-import { chromium } from "playwright";
+export async function raceExists(page, jcd, rno, date) {
+  const url = `https://www.boatrace.jp/owpc/sp/race/racecard?rno=${rno}&jcd=${jcd}&hd=${date}`;
 
-export async function raceExists(date, jcd, race) {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const res = await page.goto(url, {
+    waitUntil: "domcontentloaded",
+    timeout: 30000
+  });
 
-  const url =
-    `https://www.boatrace.jp/owpc/sp/race/racecard` +
-    `?rno=${race}&jcd=${jcd}&hd=${date}`;
+  if (!res || res.status() !== 200) return false;
 
-  try {
-    await page.goto(url, {
-      waitUntil: "domcontentloaded",
-      timeout: 30000
-    });
+  const body = await page.content();
 
-    const exists = (await page.$(".table1")) !== null;
-    await browser.close();
-    return exists;
-  } catch {
-    await browser.close();
-    return false;
-  }
+  return !body.includes("データはありません");
 }
