@@ -4,601 +4,745 @@
     "10": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "15": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "16": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "17": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "18": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "19": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "20": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "03": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "05": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "06": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "07": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ],
     "09": [
       {
         "race": 1,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 2,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 3,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 4,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 5,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 6,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 7,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 8,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 9,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 10,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 11,
-        "exists": true
+        "exists": true,
+        "fetched": false
       },
       {
         "race": 12,
-        "exists": true
+        "exists": true,
+        "fetched": false
       }
     ]
   }
