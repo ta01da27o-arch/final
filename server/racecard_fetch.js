@@ -1,74 +1,60 @@
 // server/racecard_fetch.js
-// 出走表（racecard）取得：PC版HTMLをfetchで解析
+import * as cheerio from "cheerio";
 
-import cheerio from "cheerio";
-
-export async function fetchRaceCard({ date, jcd, rno }) {
-  const url =
-    `https://www.boatrace.jp/owpc/pc/race/racecard` +
-    `?rno=${rno}&jcd=${jcd}&hd=${date}`;
+/**
+ * 出走表を取得する
+ * @param {string} date YYYYMMDD
+ * @param {string} jcd 場コード
+ * @param {number} race R番号
+ * @returns {object|null}
+ */
+export async function fetchRaceCard(date, jcd, race) {
+  const url = `https://www.boatrace.jp/owpc/sp/race/racelist?rno=${race}&jcd=${jcd}&hd=${date}`;
 
   try {
     const res = await fetch(url, {
       headers: {
         "user-agent":
-          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120",
-        "accept-language": "ja-JP,ja;q=0.9",
+          "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36",
       },
     });
 
     if (!res.ok) {
-      return { ok: false, reason: "HTTP_ERROR" };
+      console.log(`❌ ${jcd} R${race} HTTP ${res.status}`);
+      return null;
     }
 
     const html = await res.text();
-
-    // 未公開判定
-    if (html.includes("ただいま準備中")) {
-      return { ok: false, reason: "NOT_PUBLISHED" };
-    }
-
     const $ = cheerio.load(html);
-
-    const rows = $(".is-fs12 tr"); // 出走表テーブル行
-    if (rows.length === 0) {
-      return { ok: false, reason: "NO_TABLE" };
-    }
 
     const racers = [];
 
-    rows.each((_, tr) => {
+    $(".table1 tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
       if (tds.length < 6) return;
 
-      const lane = $(tds[0]).text().trim();
-      const name = $(tds[2]).text().trim();
-      const regno = $(tds[2]).find("a").attr("href")?.match(/\d{4}/)?.[0] ?? "";
-      const grade = $(tds[3]).text().trim();
-      const motor = $(tds[4]).text().trim();
-      const boat = $(tds[5]).text().trim();
-
-      if (!lane || !name) return;
-
       racers.push({
-        lane: Number(lane),
-        name,
-        regno,
-        grade,
-        motor,
-        boat,
+        lane: $(tds[0]).text().trim(),
+        name: $(tds[1]).text().trim(),
+        age: $(tds[2]).text().trim(),
+        weight: $(tds[3]).text().trim(),
+        region: $(tds[4]).text().trim(),
+        motor: $(tds[5]).text().trim(),
+        boat: $(tds[6]).text().trim(),
       });
     });
 
     if (racers.length === 0) {
-      return { ok: false, reason: "EMPTY" };
+      console.log(`ℹ️ ${jcd} R${race} 出走表未公開`);
+      return null;
     }
 
     return {
-      ok: true,
+      race,
       racers,
     };
-  } catch (e) {
-    return { ok: false, reason: "EXCEPTION", error: String(e) };
+  } catch (err) {
+    console.error(`🔥 ${jcd} R${race} 出走表取得失敗`, err);
+    return null;
   }
 }
