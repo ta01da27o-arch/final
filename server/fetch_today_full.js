@@ -1,55 +1,93 @@
-// server/fetch_today_full.js
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { fetchTodayVenues } from "./index_fetch.js";
+import { raceExists } from "./race_exists.js";
 import { fetchRaceCard } from "./racecard_fetch.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-function todayJST() {
-  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  return d.toISOString().slice(0, 10).replace(/-/g, "");
+function getTodayJST() {
+  const now = new Date();
+  now.setHours(now.getHours() + 9);
+  return now.toISOString().slice(0, 10).replace(/-/g, "");
 }
 
 async function main() {
-  const date = todayJST();
+  const date = getTodayJST();
   console.log(`📅 本日(JST): ${date}`);
 
-  const dataDir = path.join(__dirname, "data");
-  const filePath = path.join(dataDir, `${date}.json`);
+  const venues = await fetchTodayVenues(date);
+  const resultJson = {
+    date,
+    venues: {}
+  };
 
-  if (!fs.existsSync(filePath)) {
-    console.error("❌ 本日のJSONが存在しません（事前にexists判定が必要）");
-    process.exit(1);
+  if (!venues || venues.length === 0) {
+    console.warn("⚠️ 本日開催場なし（取得失敗の可能性あり）");
   }
 
-  const json = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  for (const venueId of venues) {
+    if (!venueId) continue;
 
-  for (const [jcd, races] of Object.entries(json.venues)) {
-    for (const race of races) {
-      if (!race.exists) continue;
-      if (race.racecard) continue;
+    resultJson.venues[venueId] = [];
 
-      const rno = race.race;
+    for (let raceNo = 1; raceNo <= 12; raceNo++) {
+      try {
+        const exists = await raceExists(date, venueId, raceNo);
 
-      const result = await fetchRaceCard({ date, jcd, rno });
+        if (!exists) {
+          console.log(`ℹ️ ${venueId} R${raceNo} 未公開`);
+          resultJson.venues[venueId].push({
+            race: raceNo,
+            exists: false,
+            fetched: false
+          });
+          continue;
+        }
 
-      if (!result.ok) {
-        console.log(`ℹ️ ${jcd} R${rno} 出走表未取得 (${result.reason})`);
-        race.racecard = null;
-        continue;
+        const result = await fetchRaceCard(date, venueId, raceNo);
+
+        if (!result || result.ok !== true) {
+          console.log(`ℹ️ ${venueId} R${raceNo} 出走表未公開`);
+          resultJson.venues[venueId].push({
+            race: raceNo,
+            exists: true,
+            fetched: false
+          });
+          continue;
+        }
+
+        resultJson.venues[venueId].push({
+          race: raceNo,
+          exists: true,
+          fetched: true,
+          racecard: result.data
+        });
+
+        console.log(`✅ ${venueId} R${raceNo} 出走表取得`);
+      } catch (err) {
+        console.warn(`⚠️ ${venueId} R${raceNo} エラー`, err.message);
+        resultJson.venues[venueId].push({
+          race: raceNo,
+          exists: true,
+          fetched: false,
+          error: err.message
+        });
       }
-
-      race.racecard = result.racers;
-      console.log(`✅ ${jcd} R${rno} 出走表取得`);
     }
   }
 
-  fs.writeFileSync(filePath, JSON.stringify(json, null, 2));
-  console.log(`💾 保存完了: ${filePath}`);
-  console.log("🎉 出走表（racecard）取得完了");
+  const outDir = path.join(__dirname, "data");
+  fs.mkdirSync(outDir, { recursive: true });
+
+  const outPath = path.join(outDir, `${date}.json`);
+  fs.writeFileSync(outPath, JSON.stringify(resultJson, null, 2), "utf-8");
+
+  console.log(`💾 保存完了: server/data/${date}.json`);
+  console.log("🎉 本日の全レース処理完了");
 }
 
 main();
