@@ -1,36 +1,14 @@
-// server/index_fetch.js
+export async function fetchTodayVenues(date) {
+  const url =
+    `https://www.boatrace.jp/owpc/pc/race/venues?hd=${date}&type=day`;
 
-/**
- * 本日開催場を取得（PC HTML 直取得）
- * Node.js v20 の標準 fetch を使用
- * @param {string} ymd YYYYMMDD
- * @returns {Promise<string[]>}
- */
-export async function fetchTodayVenues(ymd) {
-  const url = `https://www.boatrace.jp/owpc/pc/race/index?hd=${ymd}`;
-  console.log(`🌐 venues(pc): ${url}`);
+  const res = await fetch(url);
+  if (!res.ok) return [];
 
-  const res = await fetch(url, {
-    headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120",
-    },
-  });
+  const json = await res.json();
 
-  if (!res.ok) {
-    console.warn("⚠️ index 取得失敗");
-    return [];
-  }
-
-  const html = await res.text();
-
-  // jcd=01 ～ 24 抽出
-  const matches = [...html.matchAll(/jcd=(\d{2})/g)];
-  const venues = [...new Set(matches.map((m) => m[1]))];
-
-  if (venues.length === 0) {
-    console.warn("⚠️ 開催場が取得できません（jcdなし）");
-  }
-
-  return venues;
+  // 開催中のみ抽出
+  return json?.venues
+    ?.filter(v => v.holding)
+    ?.map(v => v.jcd) ?? [];
 }
