@@ -4,8 +4,5 @@
   "type": "module",
   "scripts": {
     "fetch": "node server/fetch_today_full.js"
-  },
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.12"
   }
 }
