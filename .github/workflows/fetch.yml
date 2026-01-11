@@ -1,37 +1,28 @@
 name: 今日のボートレース取得
 
 on:
-  workflow_dispatch:   # 手動実行
   schedule:
-    # 日本時間 8:00〜20:00 を 10分おきに実行
-    # UTC 23:00 = JST 8:00
-    - cron: "*/10 23-23 * * *"
-    - cron: "*/10 0-11 * * *"
+    - cron: "*/10 * * * *"   # 10分おき（公開直後を拾う）
+  workflow_dispatch:
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
-
     steps:
-      - name: リポジトリをチェックアウト
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Node.js セットアップ
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: 依存関係インストール
-        run: npm install
+      - run: npm install
 
-      - name: 今日のレースデータ取得
-        run: npm run fetch
+      - run: npm run fetch
 
-      - name: JSON をコミット
+      - name: Commit data
         run: |
           git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add server/data/*.json
-          git diff --cached --quiet || git commit -m "update: race data $(date +'%Y-%m-%d %H:%M')"
+          git config user.email "actions@github.com"
+          git add server/data
+          git commit -m "update race data" || echo "no change"
           git push
