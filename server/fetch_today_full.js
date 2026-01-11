@@ -11,6 +11,10 @@ console.log(`📅 本日(JST): ${date}`);
 
 const venues = await fetchTodayVenues(date);
 
+if (venues.length === 0) {
+  console.warn("⚠️ 開催場取得なし（XML/非公開の可能性）");
+}
+
 const result = { date, venues: {} };
 
 for (const jcd of venues) {
