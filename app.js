@@ -1,16 +1,13 @@
 /* =================================================
    app.js
-   UI 制御 + AI エンジン完全接続版
+   UI 制御 + AI エンジン完全接続版（修正版）
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
 
 /* =========================
-   定数・DOM
+   DOM
 ========================= */
-const VENUE_COUNT = 24;
-const RACE_COUNT = 12;
-
 const dateLabel = document.getElementById("dateLabel");
 const todayBtn = document.getElementById("todayBtn");
 const yesterdayBtn = document.getElementById("yesterdayBtn");
@@ -29,7 +26,7 @@ const raceTitle = document.getElementById("raceTitle");
 const backToVenues = document.getElementById("backToVenues");
 const backToRaces = document.getElementById("backToRaces");
 
-const entryTableBody = document.querySelector("#entryTable tbody");
+const entryBody = document.querySelector("#entryTable tbody");
 const aiMainBody = document.querySelector("#aiMain tbody");
 const aiSubBody = document.querySelector("#aiSub tbody");
 const rankingBody = document.querySelector("#rankingTable tbody");
@@ -68,7 +65,7 @@ function renderDate(){
 ========================= */
 function renderVenues(){
   venuesGrid.innerHTML = "";
-  for(let i=1;i<=VENUE_COUNT;i++){
+  for(let i=1;i<=24;i++){
     const div = document.createElement("div");
     div.className = "venue-card clickable";
     div.innerHTML = `
@@ -76,30 +73,30 @@ function renderVenues(){
       <div class="v-status">開催中</div>
       <div class="v-rate">タップ</div>
     `;
-    div.addEventListener("click",()=>{
+    div.onclick = ()=>{
       selectedVenue = i;
       showRaces();
-    });
+    };
     venuesGrid.appendChild(div);
   }
 }
 
 /* =========================
-   レース番号
+   レース選択
 ========================= */
 function showRaces(){
   switchScreen("races");
   venueTitle.textContent = `第${selectedVenue}場`;
 
   racesGrid.innerHTML = "";
-  for(let r=1;r<=RACE_COUNT;r++){
+  for(let r=1;r<=12;r++){
     const btn = document.createElement("div");
     btn.className = "race-btn";
     btn.textContent = `${r}R`;
-    btn.addEventListener("click",()=>{
+    btn.onclick = ()=>{
       selectedRace = r;
-      showRaceDetail();
-    });
+      showDetail();
+    };
     racesGrid.appendChild(btn);
   }
 }
@@ -107,34 +104,37 @@ function showRaces(){
 /* =========================
    出走表 + AI
 ========================= */
-function showRaceDetail(){
+function showDetail(){
   switchScreen("detail");
   raceTitle.textContent = `第${selectedVenue}場 ${selectedRace}R`;
 
-  const dummyRaceData = {
+  const raceData = {
     entries: [1,2,3,4,5,6].map(i=>({
       lane: i,
       name: `選手${i}`,
       st: (0.12 + i*0.01).toFixed(2),
-      f: 0,
-      nat: "52.3%",
-      loc: "48.1%",
-      mt: "◎",
-      course: i,
+      f: i === 1 ? 0 : (i === 2 ? 1 : 2), // F0 / F1 / F2
+      nat: 50 + i,      // 全国勝率
+      loc: 45 + i,      // 当地勝率
+      mt: 40 + i,       // モーター勝率
+      course: 55 - i,   // コース勝率
       eval: ["◎","○","▲","△","×","×"][i-1]
     }))
   };
 
-  renderEntryTable(dummyRaceData);
-  renderAI(dummyRaceData);
+  renderEntry(raceData);
+  renderAI(raceData);
 }
 
 /* =========================
-   出走表描画
+   出走表描画（修正版）
 ========================= */
-function renderEntryTable(raceData){
-  entryTableBody.innerHTML = "";
-  raceData.entries.forEach(e=>{
+function renderEntry(data){
+  entryBody.innerHTML = "";
+
+  data.entries.forEach(e=>{
+    const fDisplay = e.f === 0 ? "－" : e.f;
+
     const tr = document.createElement("tr");
     tr.className = `row-${e.lane}`;
     tr.innerHTML = `
@@ -146,14 +146,14 @@ function renderEntryTable(raceData){
           <div class="st">ST ${e.st}</div>
         </div>
       </td>
-      <td>${e.f}</td>
-      <td>${e.nat}</td>
-      <td>${e.loc}</td>
-      <td>${e.mt}</td>
-      <td>${e.course}</td>
+      <td>${fDisplay}</td>
+      <td>${e.nat}%</td>
+      <td>${e.loc}%</td>
+      <td>${e.mt}%</td>
+      <td>${e.course}%</td>
       <td class="eval-mark">${e.eval}</td>
     `;
-    entryTableBody.appendChild(tr);
+    entryBody.appendChild(tr);
   });
 }
 
@@ -213,22 +213,22 @@ function switchScreen(target){
    イベント
 ========================= */
 function bindEvents(){
-  backToVenues.addEventListener("click",()=>switchScreen("venues"));
-  backToRaces.addEventListener("click",()=>switchScreen("races"));
+  backToVenues.onclick = ()=>switchScreen("venues");
+  backToRaces.onclick = ()=>switchScreen("races");
 
-  todayBtn.addEventListener("click",()=>{
+  todayBtn.onclick = ()=>{
     selectedDate = new Date();
     todayBtn.classList.add("active");
     yesterdayBtn.classList.remove("active");
     renderDate();
-  });
+  };
 
-  yesterdayBtn.addEventListener("click",()=>{
+  yesterdayBtn.onclick = ()=>{
     selectedDate = new Date(Date.now()-86400000);
     yesterdayBtn.classList.add("active");
     todayBtn.classList.remove("active");
     renderDate();
-  });
+  };
 
-  refreshBtn.addEventListener("click",()=>location.reload());
+  refreshBtn.onclick = ()=>location.reload();
 }
