@@ -1,6 +1,7 @@
 /* =================================================
    app.js
-   出走表UI + 横棒グラフ（ダミー分析版）
+   出走表 + 入着率分析（横棒グラフ）
+   Edge / Chrome 両対応
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
@@ -17,15 +18,15 @@ let currentRace  = null;
    初期化
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-  initDate();
-  initVenueTemplate();
-  bindHeaderButtons();
+  renderDate();
+  renderVenueTemplate();
+  bindHeader();
 });
 
 /* =========================
-   日付表示
+   日付
 ========================= */
-function initDate(){
+function renderDate(){
   const d = new Date();
   const y = d.getFullYear();
   const m = String(d.getMonth()+1).padStart(2,"0");
@@ -36,9 +37,9 @@ function initDate(){
 /* =========================
    24場 固定雛型
 ========================= */
-function initVenueTemplate(){
-  const venuesGrid = document.getElementById("venuesGrid");
-  venuesGrid.innerHTML = "";
+function renderVenueTemplate(){
+  const grid = document.getElementById("venuesGrid");
+  grid.innerHTML = "";
 
   for(let i=1;i<=24;i++){
     const card = document.createElement("div");
@@ -46,29 +47,28 @@ function initVenueTemplate(){
     card.innerHTML = `
       <div class="v-name">場 ${i}</div>
       <div class="v-status">開催中</div>
-      <div class="v-rate">タップ</div>
+      <div class="v-rate">表示</div>
     `;
-    card.addEventListener("click", () => openRaces(i));
-    venuesGrid.appendChild(card);
+    card.onclick = () => openRaces(i);
+    grid.appendChild(card);
   }
 }
 
 /* =========================
-   ヘッダーボタン
+   ヘッダー
 ========================= */
-function bindHeaderButtons(){
-  document.getElementById("refreshBtn").addEventListener("click", () => {
-    location.reload();
-  });
+function bindHeader(){
+  document.getElementById("refreshBtn").onclick = () => location.reload();
 }
 
 /* =========================
-   レース番号画面
+   レース画面
 ========================= */
-function openRaces(venueId){
-  currentVenue = venueId;
+function openRaces(venue){
+  currentVenue = venue;
   switchScreen("screen-races");
-  document.getElementById("venueTitle").textContent = `場 ${venueId}`;
+
+  document.getElementById("venueTitle").textContent = `場 ${venue}`;
 
   const grid = document.getElementById("racesGrid");
   grid.innerHTML = "";
@@ -77,7 +77,7 @@ function openRaces(venueId){
     const btn = document.createElement("div");
     btn.className = "race-btn";
     btn.textContent = `${r}R`;
-    btn.addEventListener("click", () => openRaceDetail(r));
+    btn.onclick = () => openRaceDetail(r);
     grid.appendChild(btn);
   }
 
@@ -89,14 +89,15 @@ function openRaces(venueId){
 /* =========================
    出走表画面
 ========================= */
-function openRaceDetail(raceNo){
-  currentRace = raceNo;
+function openRaceDetail(race){
+  currentRace = race;
   switchScreen("screen-detail");
+
   document.getElementById("raceTitle").textContent =
-    `場 ${currentVenue} / ${raceNo}R`;
+    `場 ${currentVenue} / ${race}R`;
 
   renderEntryTable();
-  renderAIBlocks();
+  renderAIAndGraph();
 
   document.getElementById("backToRaces").onclick = () => {
     switchScreen("screen-races");
@@ -104,7 +105,7 @@ function openRaceDetail(raceNo){
 }
 
 /* =========================
-   出走表（簡易ダミー）
+   出走表（簡易）
 ========================= */
 function renderEntryTable(){
   const tbody = document.querySelector("#entryTable tbody");
@@ -123,11 +124,11 @@ function renderEntryTable(){
           <div class="st">ST 0.${10+lane}</div>
         </div>
       </td>
-      <td>${lane===1 ? "1" : "0"}</td>
-      <td>${(50-lane*2)}%</td>
-      <td>${(48-lane*2)}%</td>
-      <td>${(45-lane*2)}%</td>
-      <td>${(52-lane*2)}%</td>
+      <td>${lane === 1 ? "1" : "0"}</td>
+      <td>${48 - lane * 2}%</td>
+      <td>${46 - lane * 2}%</td>
+      <td>${44 - lane * 2}%</td>
+      <td>${50 - lane * 2}%</td>
       <td class="eval-mark">◎</td>
     `;
     tbody.appendChild(tr);
@@ -135,56 +136,51 @@ function renderEntryTable(){
 }
 
 /* =========================
-   AIブロック + 横棒グラフ
+   AI + 入着率分析
 ========================= */
-function renderAIBlocks(){
-  // 既存AI予想
+function renderAIAndGraph(){
   const ai = generateAIPrediction({ entries: [] });
 
-  renderPredictionTable("aiMain", ai.main);
-  renderPredictionTable("aiSub", ai.sub);
+  renderPrediction("aiMain", ai.main);
+  renderPrediction("aiSub", ai.sub);
 
-  // ⭐ 横棒グラフ描画
-  renderLaneGraph();
+  renderArrivalRateGraph();
 }
 
 /* =========================
-   横棒グラフ（ダミー分析）
+   入着率 横棒グラフ
 ========================= */
-function renderLaneGraph(){
-  const container = document.getElementById("rankingTable");
-  container.closest(".card").querySelector(".h3").textContent =
-    "コース別 入着率分析（総合）";
+function renderArrivalRateGraph(){
+  const card = document.getElementById("rankingTable").closest(".card");
+  card.querySelector(".h3").textContent = "コース別 入着率分析";
 
-  const tbody = container.querySelector("tbody");
+  const tbody = card.querySelector("tbody");
   tbody.innerHTML = "";
 
   LANES.forEach(lane => {
-    const value = calcDummyRate(lane); // 0-100
+    const value = calcExpectation(lane);
 
     const tr = document.createElement("tr");
     tr.className = `lane-${lane}`;
 
     tr.innerHTML = `
-      <td>${lane}コース</td>
-      <td colspan="3">
-        <div style="display:flex;align-items:center;gap:8px;">
+      <td>${lane}</td>
+      <td>
+        <div style="
+          width:100%;
+          height:14px;
+          background:#eef2f7;
+          border-radius:8px;
+          overflow:hidden;
+        ">
           <div style="
-            flex:1;
-            height:14px;
-            background:#eef2f7;
-            border-radius:8px;
-            overflow:hidden;
-          ">
-            <div style="
-              width:${value}%;
-              height:100%;
-            "></div>
-          </div>
-          <div style="min-width:40px;font-weight:900;">
-            ${value}%
-          </div>
+            width:${value}%;
+            height:100%;
+          "></div>
         </div>
+      </td>
+      <td style="font-weight:900;">
+        ${value}%
       </td>
     `;
     tbody.appendChild(tr);
@@ -192,17 +188,17 @@ function renderLaneGraph(){
 }
 
 /* =========================
-   ダミー計算
+   期待値（ダミー）
 ========================= */
-function calcDummyRate(lane){
-  // UI確認用：内枠有利想定
-  return Math.max(20, 80 - lane * 8);
+function calcExpectation(lane){
+  // 実データ差し替え前提
+  return Math.max(25, 85 - lane * 9);
 }
 
 /* =========================
    AIテーブル
 ========================= */
-function renderPredictionTable(id, rows){
+function renderPrediction(id, rows){
   const tbody = document.querySelector(`#${id} tbody`);
   tbody.innerHTML = "";
 
@@ -220,8 +216,9 @@ function renderPredictionTable(id, rows){
    画面切替
 ========================= */
 function switchScreen(id){
-  document.querySelectorAll(".screen").forEach(s => {
-    s.classList.remove("active");
-  });
+  const screens = document.querySelectorAll(".screen");
+  for(let i=0;i<screens.length;i++){
+    screens[i].classList.remove("active");
+  }
   document.getElementById(id).classList.add("active");
 }
