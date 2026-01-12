@@ -1,50 +1,112 @@
-import fs from "fs";
-import { fetchTodayVenues } from "./index_fetch.js";
-import { raceExists } from "./race_exists.js";
-import { fetchRacecard } from "./racecard_fetch.js";
+// server/fetch_today_full.js
+// 今日(JST)の公開済みレースだけを取得・保存する
 
-const date = new Date()
-  .toLocaleDateString("sv-SE")
-  .replace(/-/g, "");
+import fs from "fs/promises";
+import path from "path";
 
-console.log(`📅 本日(JST): ${date}`);
+const DATA_BASE = path.resolve("server/data");
 
-const venues = await fetchTodayVenues(date);
-
-if (venues.length === 0) {
-  console.warn("⚠️ 開催場取得なし（XML/非公開の可能性）");
+// JST 今日の日付 YYYYMMDD
+function getTodayJST() {
+  const now = new Date();
+  const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  return jst.toISOString().slice(0, 10).replace(/-/g, "");
 }
 
-const result = { date, venues: {} };
+/**
+ * fetch wrapper（JSON限定）
+ */
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  const type = res.headers.get("content-type") || "";
 
-for (const jcd of venues) {
-  result.venues[jcd] = [];
-
-  for (let r = 1; r <= 12; r++) {
-    const exists = await raceExists(date, jcd, r);
-    if (!exists) continue;
-
-    const racecard = await fetchRacecard(date, jcd, r);
-
-    result.venues[jcd].push({
-      race: r,
-      exists: true,
-      fetched: racecard.fetched,
-      racecard
-    });
-
-    console.log(
-      racecard.fetched
-        ? `✅ ${jcd} R${r} 出走表取得`
-        : `ℹ️ ${jcd} R${r} 未公開`
-    );
+  if (!type.includes("application/json")) {
+    console.warn(`⚠️ JSONでないレスポンス: ${type}`);
+    return null;
   }
+  return await res.json();
 }
 
-fs.mkdirSync("server/data", { recursive: true });
-fs.writeFileSync(
-  `server/data/${date}.json`,
-  JSON.stringify(result, null, 2)
-);
+/**
+ * ディレクトリ保証
+ */
+async function ensureDir(dir) {
+  await fs.mkdir(dir, { recursive: true });
+}
 
-console.log("🎉 本日の全レース処理完了");
+/**
+ * 単レース取得 → 保存
+ */
+async function fetchRace(date, venue, race) {
+  const url =
+    `https://boatrace.jp/owpc/pc/race/racelist?rno=${race}` +
+    `&jcd=${venue}&hd=${date}`;
+
+  const json = await fetchJSON(url);
+  if (!json) return false;
+
+  // 出走表未公開
+  if (!json?.raceInformation?.program) return false;
+
+  const boats = json.raceInformation.program;
+  if (!Array.isArray(boats) || boats.length !== 6) return false;
+
+  const saveData = {
+    date,
+    venue,
+    race,
+    published: true,
+    boats,
+    fetchedAt: new Date().toISOString(),
+  };
+
+  const dir = path.join(DATA_BASE, date, venue);
+  await ensureDir(dir);
+
+  const filePath = path.join(dir, `${race}.json`);
+  await fs.writeFile(filePath, JSON.stringify(saveData, null, 2), "utf-8");
+
+  return true;
+}
+
+/**
+ * メイン処理
+ */
+async function main() {
+  const date = getTodayJST();
+  console.log(`📅 本日(JST): ${date}`);
+
+  // 開催場一覧
+  const venuesURL =
+    `https://boatrace.jp/owpc/pc/race/index?hd=${date}`;
+
+  const venuesJSON = await fetchJSON(venuesURL);
+  if (!venuesJSON?.data) {
+    console.warn("⚠️ 開催場取得なし（XML/未公開）");
+    return;
+  }
+
+  const venues = venuesJSON.data.map(v => v.jcd);
+  if (venues.length === 0) {
+    console.warn("⚠️ 開催場なし");
+    return;
+  }
+
+  console.log(`🏟 開催場: ${venues.join(", ")}`);
+
+  for (const venue of venues) {
+    for (let r = 1; r <= 12; r++) {
+      const ok = await fetchRace(date, venue, r);
+      if (ok) {
+        console.log(`✅ ${venue} ${r}R 保存`);
+      }
+    }
+  }
+
+  console.log("🎉 本日の公開レース取得完了");
+}
+
+main().catch(err => {
+  console.error("❌ fetch error:", err);
+  process.exit(1);
+});
