@@ -1,15 +1,11 @@
 /* =================================================
    app.js
-   出走表 + 入着率分析（横棒グラフ・文字なし）
-   Edge / Chrome 両対応
+   出走表 + 入着率分析（横棒グラフ最終版）
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
 
 const LANES = [1, 2, 3, 4, 5, 6];
-
-let currentVenue = null;
-let currentRace = null;
 
 /* =========================
    初期化
@@ -21,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================
-   日付
+   日付表示
 ========================= */
 function renderDate() {
   const d = new Date();
@@ -63,9 +59,7 @@ function bindHeader() {
    レース一覧
 ========================= */
 function openRaces(venue) {
-  currentVenue = venue;
   switchScreen("screen-races");
-
   document.getElementById("venueTitle").textContent = `場 ${venue}`;
 
   const grid = document.getElementById("racesGrid");
@@ -75,36 +69,31 @@ function openRaces(venue) {
     const btn = document.createElement("div");
     btn.className = "race-btn";
     btn.textContent = `${r}R`;
-    btn.onclick = () => openRaceDetail(r);
+    btn.onclick = () => openRaceDetail(venue, r);
     grid.appendChild(btn);
   }
 
-  document.getElementById("backToVenues").onclick = () => {
+  document.getElementById("backToVenues").onclick = () =>
     switchScreen("screen-venues");
-  };
 }
 
 /* =========================
    出走表画面
 ========================= */
-function openRaceDetail(race) {
-  currentRace = race;
+function openRaceDetail(venue, race) {
   switchScreen("screen-detail");
-
-  document.getElementById(
-    "raceTitle"
-  ).textContent = `場 ${currentVenue} / ${race}R`;
+  document.getElementById("raceTitle").textContent = `場 ${venue} / ${race}R`;
 
   renderEntryTable();
-  renderAIAndAnalysis();
+  renderAI();
+  renderArrivalRateAnalysis();
 
-  document.getElementById("backToRaces").onclick = () => {
+  document.getElementById("backToRaces").onclick = () =>
     switchScreen("screen-races");
-  };
 }
 
 /* =========================
-   出走表（簡易ダミー）
+   出走表（簡易）
 ========================= */
 function renderEntryTable() {
   const tbody = document.querySelector("#entryTable tbody");
@@ -123,7 +112,7 @@ function renderEntryTable() {
           <div class="st">ST 0.${10 + lane}</div>
         </div>
       </td>
-      <td>${lane === 1 ? "1" : "0"}</td>
+      <td>${lane === 1 ? "1" : "ー"}</td>
       <td>${48 - lane * 2}%</td>
       <td>${46 - lane * 2}%</td>
       <td>${44 - lane * 2}%</td>
@@ -135,27 +124,34 @@ function renderEntryTable() {
 }
 
 /* =========================
-   AI + 入着率分析
+   AI予想
 ========================= */
-function renderAIAndAnalysis() {
-  const ai = generateAIPrediction({ entries: [] });
+function renderAI() {
+  const ai = generateAIPrediction({});
 
   renderPrediction("aiMain", ai.main);
   renderPrediction("aiSub", ai.sub);
+}
 
-  renderArrivalRateAnalysis();
+function renderPrediction(id, rows) {
+  const tbody = document.querySelector(`#${id} tbody`);
+  tbody.innerHTML = "";
+  rows.forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${r.bet}</td><td>${r.prob}%</td>`;
+    tbody.appendChild(tr);
+  });
 }
 
 /* =========================
-   入着率分析（文字なしバー）
+   入着率分析（最終）
 ========================= */
 function renderArrivalRateAnalysis() {
   const card = document
     .getElementById("rankingTable")
     .closest(".card");
 
-  card.querySelector(".h3").textContent =
-    "コース別 入着率分析";
+  card.querySelector(".h3").textContent = "コース別 入着率分析";
 
   const tbody = card.querySelector("tbody");
   tbody.innerHTML = "";
@@ -164,56 +160,27 @@ function renderArrivalRateAnalysis() {
     const value = calcExpectation(lane);
 
     const tr = document.createElement("tr");
-    tr.className = `row-${lane}`;
 
     tr.innerHTML = `
       <td style="font-weight:900;">${lane}</td>
       <td>
-        <div style="
-          width:100%;
-          height:14px;
-          background:#e5e7eb;
-          border-radius:7px;
-          overflow:hidden;
-        ">
-          <div style="
-            width:${value}%;
-            height:100%;
-            border-radius:7px;
-          "></div>
+        <div style="width:100%; height:14px; background:#e5e7eb;">
+          <div class="bar lane-${lane}"
+               style="width:${value}%; height:14px;"></div>
         </div>
       </td>
-      <td style="font-weight:900;">
-        ${value}%
-      </td>
+      <td style="font-weight:900;">${value}%</td>
     `;
+
     tbody.appendChild(tr);
   });
 }
 
 /* =========================
-   期待値（仮ロジック）
+   期待値（仮）
 ========================= */
 function calcExpectation(lane) {
-  // 実データ連携前のダミー
   return Math.max(20, 85 - lane * 9);
-}
-
-/* =========================
-   AI予想テーブル
-========================= */
-function renderPrediction(id, rows) {
-  const tbody = document.querySelector(`#${id} tbody`);
-  tbody.innerHTML = "";
-
-  rows.forEach((r) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.bet}</td>
-      <td>${r.prob}%</td>
-    `;
-    tbody.appendChild(tr);
-  });
 }
 
 /* =========================
