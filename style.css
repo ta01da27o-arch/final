@@ -8,6 +8,9 @@
   --red:#e11d48;
 }
 
+/* =========================
+   Base
+========================= */
 *{box-sizing:border-box}
 html,body{
   margin:0;
@@ -15,126 +18,233 @@ html,body{
   height:100%;
   font-family:"Noto Sans JP",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   color:var(--text);
-  background:#fff;
+  background:#ffffff;
 }
 
-/* Header */
+/* 🔽 追加：クリック不能防止（超重要） */
+button,
+.venue-card,
+.race-btn{
+  pointer-events:auto;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+/* =========================
+   Header
+========================= */
 .app-header{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   padding:10px 12px;
   background:var(--deep-sky);
   color:#fff;
   position:sticky;
   top:0;
+  z-index:40;
 }
 
-.app-title{margin:0;font-size:18px;font-weight:900}
+.title-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.app-title{
+  margin:0;
+  font-weight:900;
+  font-size:18px;
+}
+
+.meta-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
 
 .date-label{
-  background:#fff;
-  color:#012a45;
+  font-weight:700;
+  background:rgba(255,255,255,0.85);
   padding:6px 8px;
   border-radius:8px;
-  font-weight:800;
+  color:#012a45;
 }
 
-.view{padding:10px;max-width:980px;margin:auto}
-.screen{display:none}
-.screen.active{display:block}
+.tabs{
+  display:flex;
+  gap:6px;
+}
+
+.tab{
+  background:rgba(255,255,255,0.85);
+  border:0;
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:700;
+  color:#003c6b;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:#012a45;
+  color:#fff;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.btn{
+  background:#fff;
+  color:var(--deep-sky);
+  border:0;
+  padding:8px 12px;
+  border-radius:8px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.btn.back{
+  background:var(--navy);
+  color:#fff;
+}
+
+/* =========================
+   Main / Screen
+========================= */
+.view{
+  padding:10px;
+  max-width:980px;
+  margin:0 auto;
+}
+
+.screen{ display:none; }
+.screen.active{ display:block; }
 
 .card{
-  background:#fff;
+  background:var(--card);
   border-radius:12px;
   padding:12px;
+  box-shadow:0 8px 24px rgba(2,6,23,.06);
   margin-bottom:12px;
-  box-shadow:0 8px 24px rgba(0,0,0,.06);
 }
 
-/* Venues */
+/* =========================
+   Venues
+========================= */
 .venues-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:8px;
 }
+
 .venue-card{
-  border:1px solid #e5e7eb;
   border-radius:10px;
   padding:8px;
   text-align:center;
+  border:1px solid rgba(0,0,0,0.06);
 }
-.venue-card.clickable{cursor:pointer}
 
-/* Races */
+.venue-card.clickable{
+  cursor:pointer;
+}
+
+/* =========================
+   Races
+========================= */
 .races-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:8px;
 }
+
 .race-btn{
   background:#e6f7ff;
   padding:12px;
   border-radius:8px;
   font-weight:900;
-  text-align:center;
   cursor:pointer;
 }
 
-/* Table */
+/* =========================
+   Table
+========================= */
 .table{
   width:100%;
   border-collapse:collapse;
 }
-.table th,.table td{
+
+.table th,
+.table td{
   border:1px solid #e5e7eb;
   padding:8px;
   text-align:center;
 }
 
-/* Rows */
-.row-1 td{background:#ffffff}
-.row-2 td{background:#f7f7f9}
-.row-3 td{background:#fff6f6}
-.row-4 td{background:#eef8ff}
-.row-5 td{background:#fffdf0}
-.row-6 td{background:#f4fff7}
+/* =========================
+   Course Rows
+========================= */
+.row-1 td{ background:#ffffff; }
+.row-2 td{ background:#f7f7f9; }
+.row-3 td{ background:#fff6f6; }
+.row-4 td{ background:#eef8ff; }
+.row-5 td{ background:#fffdf0; }
+.row-6 td{ background:#f4fff7; }
 
-/* Analysis */
+/* =========================
+   Analysis Bar（重要修正）
+========================= */
 .analysis-row{
   display:flex;
   align-items:center;
   gap:8px;
   margin:6px 0;
+  font-size:13px;
 }
-.analysis-lane{width:32px;font-weight:900}
+
+.analysis-lane{
+  width:32px;
+  font-weight:900;
+  text-align:center;
+}
+
 .analysis-bar-bg{
   flex:1;
+  min-width:0;          /* 🔴 flex潰れ防止 */
   height:12px;
-  background:#e5e7eb;
+  background:#e0e0e0;
+  overflow:hidden;
 }
+
 .analysis-bar{
   height:100%;
-  border-radius:0;
+  border-radius:0;      /* 🔴 楕円防止 */
+  transition:width .3s ease;
 }
+
+/* 🔽 row色を確実にグラフへ反映 */
+.row-1 .analysis-bar{ background:#ffffff; }
+.row-2 .analysis-bar{ background:#f7f7f9; }
+.row-3 .analysis-bar{ background:#fff6f6; }
+.row-4 .analysis-bar{ background:#eef8ff; }
+.row-5 .analysis-bar{ background:#fffdf0; }
+.row-6 .analysis-bar{ background:#f4fff7; }
+
 .analysis-value{
   width:48px;
   text-align:right;
   font-size:12px;
 }
 
-/* Graph colors */
-.row-1 .analysis-bar{background:#ffffff}
-.row-2 .analysis-bar{background:#f7f7f9}
-.row-3 .analysis-bar{background:#fff6f6}
-.row-4 .analysis-bar{background:#eef8ff}
-.row-5 .analysis-bar{background:#fffdf0}
-.row-6 .analysis-bar{background:#f4fff7}
-
-/* Footer */
+/* =========================
+   Footer
+========================= */
 .app-footer{
   text-align:center;
+  padding:10px;
   font-size:12px;
   color:#6b7280;
-  padding:10px;
 }
