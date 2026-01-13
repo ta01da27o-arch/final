@@ -1,5 +1,5 @@
 /* =================================================
-   app.js（デザイン完全復元・完成版）
+   app.js（24場配色 完全復活・完成版）
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
@@ -20,7 +20,7 @@ const LANES = [1,2,3,4,5,6];
 /* =========================
    DOM
 ========================= */
-const dateLabel   = document.getElementById("dateLabel");
+const dateLabel = document.getElementById("dateLabel");
 const venuesGrid = document.getElementById("venuesGrid");
 const racesGrid  = document.getElementById("racesGrid");
 const venueTitle = document.getElementById("venueTitle");
@@ -61,7 +61,7 @@ function showScreen(target){
 }
 
 /* =========================
-   24場 固定雛型（完全復元）
+   24場 固定雛型（配色完全対応）
 ========================= */
 function renderVenues(){
   venuesGrid.innerHTML = "";
@@ -71,11 +71,13 @@ function renderVenues(){
 
     const card = document.createElement("div");
     card.className = `venue-card clickable venue-${no}`;
+
     card.innerHTML = `
       <div class="v-name">${name}</div>
       <div class="v-status">開催中</div>
       <div class="v-rate">確認</div>
     `;
+
     card.onclick = ()=>openVenue(i+1, name);
     venuesGrid.appendChild(card);
   });
