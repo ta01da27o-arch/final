@@ -1,5 +1,5 @@
 /* =================================================
-   app.js（24場タップ完全対応／Edge・Chrome対応）
+   app.js（24場デザイン完全復元・タップ対応版）
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
@@ -40,7 +40,7 @@ const refreshBtn   = document.getElementById("refreshBtn");
 document.addEventListener("DOMContentLoaded", () => {
   renderDate();
   renderVenues();
-  refreshBtn.addEventListener("click", ()=>location.reload());
+  refreshBtn.onclick = () => location.reload();
 });
 
 /* =========================
@@ -61,7 +61,7 @@ function showScreen(target){
 }
 
 /* =========================
-   24場 固定雛型（クリック完全対応）
+   24場 固定雛型（完全復元）
 ========================= */
 function renderVenues(){
   venuesGrid.innerHTML = "";
@@ -69,10 +69,17 @@ function renderVenues(){
   VENUES.forEach((name, i)=>{
     const no = String(i+1).padStart(2,"0");
 
-    // ★ div → button に変更（最重要）
     const card = document.createElement("button");
     card.type = "button";
     card.className = `venue-card venue-${no}`;
+
+    /* ★★★ ここが最重要 ★★★
+       button の UA スタイルを完全無効化 */
+    card.style.all = "unset";
+    card.style.display = "block";
+    card.style.width = "100%";
+    card.style.height = "100%";
+    card.style.cursor = "pointer";
 
     card.innerHTML = `
       <div class="v-name">${name}</div>
@@ -80,7 +87,6 @@ function renderVenues(){
       <div class="v-rate">確認</div>
     `;
 
-    // ★ onclick ではなく addEventListener
     card.addEventListener("click", ()=>{
       openVenue(i+1, name);
     });
@@ -109,10 +115,7 @@ function openVenue(no, name){
     racesGrid.appendChild(btn);
   }
 
-  backToVenues.addEventListener("click", ()=>{
-    showScreen(screenVenues);
-  }, { once:true });
-
+  backToVenues.onclick = ()=>showScreen(screenVenues);
   showScreen(screenRaces);
 }
 
@@ -127,10 +130,7 @@ function openRace(vNo, vName, race){
   renderComments();
   renderArrivalRateAnalysis();
 
-  backToRaces.addEventListener("click", ()=>{
-    showScreen(screenRaces);
-  }, { once:true });
-
+  backToRaces.onclick = ()=>showScreen(screenRaces);
   showScreen(screenDetail);
 }
 
