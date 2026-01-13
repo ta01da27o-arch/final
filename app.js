@@ -1,18 +1,15 @@
 /* =================================================
    app.js
-   出走表 + 入着率分析（横棒グラフ）
+   出走表 + 入着率分析（横棒グラフ・文字なし）
    Edge / Chrome 両対応
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
 
-/* =========================
-   定数・状態
-========================= */
-const LANES = [1,2,3,4,5,6];
+const LANES = [1, 2, 3, 4, 5, 6];
 
 let currentVenue = null;
-let currentRace  = null;
+let currentRace = null;
 
 /* =========================
    初期化
@@ -26,22 +23,22 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =========================
    日付
 ========================= */
-function renderDate(){
+function renderDate() {
   const d = new Date();
   const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
   document.getElementById("dateLabel").textContent = `${y}/${m}/${day}`;
 }
 
 /* =========================
    24場 固定雛型
 ========================= */
-function renderVenueTemplate(){
+function renderVenueTemplate() {
   const grid = document.getElementById("venuesGrid");
   grid.innerHTML = "";
 
-  for(let i=1;i<=24;i++){
+  for (let i = 1; i <= 24; i++) {
     const card = document.createElement("div");
     card.className = "venue-card clickable";
     card.innerHTML = `
@@ -57,14 +54,15 @@ function renderVenueTemplate(){
 /* =========================
    ヘッダー
 ========================= */
-function bindHeader(){
-  document.getElementById("refreshBtn").onclick = () => location.reload();
+function bindHeader() {
+  document.getElementById("refreshBtn").onclick = () =>
+    location.reload();
 }
 
 /* =========================
-   レース画面
+   レース一覧
 ========================= */
-function openRaces(venue){
+function openRaces(venue) {
   currentVenue = venue;
   switchScreen("screen-races");
 
@@ -73,7 +71,7 @@ function openRaces(venue){
   const grid = document.getElementById("racesGrid");
   grid.innerHTML = "";
 
-  for(let r=1;r<=12;r++){
+  for (let r = 1; r <= 12; r++) {
     const btn = document.createElement("div");
     btn.className = "race-btn";
     btn.textContent = `${r}R`;
@@ -89,15 +87,16 @@ function openRaces(venue){
 /* =========================
    出走表画面
 ========================= */
-function openRaceDetail(race){
+function openRaceDetail(race) {
   currentRace = race;
   switchScreen("screen-detail");
 
-  document.getElementById("raceTitle").textContent =
-    `場 ${currentVenue} / ${race}R`;
+  document.getElementById(
+    "raceTitle"
+  ).textContent = `場 ${currentVenue} / ${race}R`;
 
   renderEntryTable();
-  renderAIAndGraph();
+  renderAIAndAnalysis();
 
   document.getElementById("backToRaces").onclick = () => {
     switchScreen("screen-races");
@@ -105,13 +104,13 @@ function openRaceDetail(race){
 }
 
 /* =========================
-   出走表（簡易）
+   出走表（簡易ダミー）
 ========================= */
-function renderEntryTable(){
+function renderEntryTable() {
   const tbody = document.querySelector("#entryTable tbody");
   tbody.innerHTML = "";
 
-  LANES.forEach(lane => {
+  LANES.forEach((lane) => {
     const tr = document.createElement("tr");
     tr.className = `row-${lane}`;
 
@@ -121,7 +120,7 @@ function renderEntryTable(){
         <div class="entry-left">
           <div class="klass">A1</div>
           <div class="name">選手${lane}</div>
-          <div class="st">ST 0.${10+lane}</div>
+          <div class="st">ST 0.${10 + lane}</div>
         </div>
       </td>
       <td>${lane === 1 ? "1" : "0"}</td>
@@ -138,44 +137,49 @@ function renderEntryTable(){
 /* =========================
    AI + 入着率分析
 ========================= */
-function renderAIAndGraph(){
+function renderAIAndAnalysis() {
   const ai = generateAIPrediction({ entries: [] });
 
   renderPrediction("aiMain", ai.main);
   renderPrediction("aiSub", ai.sub);
 
-  renderArrivalRateGraph();
+  renderArrivalRateAnalysis();
 }
 
 /* =========================
-   入着率 横棒グラフ
+   入着率分析（文字なしバー）
 ========================= */
-function renderArrivalRateGraph(){
-  const card = document.getElementById("rankingTable").closest(".card");
-  card.querySelector(".h3").textContent = "コース別 入着率分析";
+function renderArrivalRateAnalysis() {
+  const card = document
+    .getElementById("rankingTable")
+    .closest(".card");
+
+  card.querySelector(".h3").textContent =
+    "コース別 入着率分析";
 
   const tbody = card.querySelector("tbody");
   tbody.innerHTML = "";
 
-  LANES.forEach(lane => {
+  LANES.forEach((lane) => {
     const value = calcExpectation(lane);
 
     const tr = document.createElement("tr");
-    tr.className = `lane-${lane}`;
+    tr.className = `row-${lane}`;
 
     tr.innerHTML = `
-      <td>${lane}</td>
+      <td style="font-weight:900;">${lane}</td>
       <td>
         <div style="
           width:100%;
           height:14px;
-          background:#eef2f7;
-          border-radius:8px;
+          background:#e5e7eb;
+          border-radius:7px;
           overflow:hidden;
         ">
           <div style="
             width:${value}%;
             height:100%;
+            border-radius:7px;
           "></div>
         </div>
       </td>
@@ -188,21 +192,21 @@ function renderArrivalRateGraph(){
 }
 
 /* =========================
-   期待値（ダミー）
+   期待値（仮ロジック）
 ========================= */
-function calcExpectation(lane){
-  // 実データ差し替え前提
-  return Math.max(25, 85 - lane * 9);
+function calcExpectation(lane) {
+  // 実データ連携前のダミー
+  return Math.max(20, 85 - lane * 9);
 }
 
 /* =========================
-   AIテーブル
+   AI予想テーブル
 ========================= */
-function renderPrediction(id, rows){
+function renderPrediction(id, rows) {
   const tbody = document.querySelector(`#${id} tbody`);
   tbody.innerHTML = "";
 
-  rows.forEach(r => {
+  rows.forEach((r) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${r.bet}</td>
@@ -215,10 +219,9 @@ function renderPrediction(id, rows){
 /* =========================
    画面切替
 ========================= */
-function switchScreen(id){
-  const screens = document.querySelectorAll(".screen");
-  for(let i=0;i<screens.length;i++){
-    screens[i].classList.remove("active");
-  }
+function switchScreen(id) {
+  document.querySelectorAll(".screen").forEach((s) =>
+    s.classList.remove("active")
+  );
   document.getElementById(id).classList.add("active");
 }
