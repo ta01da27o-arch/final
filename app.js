@@ -1,23 +1,38 @@
 /* =================================================
-   app.js（完成版・24場雛型完全保持）
+   app.js（index.html 完全対応・完成版）
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
 
+/* =========================
+   定数
+========================= */
 const LANES = [1, 2, 3, 4, 5, 6];
 
-let currentVenue = null;
-let currentRace = null;
+/* =========================
+   DOM取得
+========================= */
+const dateLabel     = document.getElementById("dateLabel");
+const venuesGrid   = document.getElementById("venuesGrid");
+const racesGrid    = document.getElementById("racesGrid");
+const venueTitle   = document.getElementById("venueTitle");
+const raceTitle    = document.getElementById("raceTitle");
+
+const screenVenues = document.getElementById("screen-venues");
+const screenRaces  = document.getElementById("screen-races");
+const screenDetail = document.getElementById("screen-detail");
+
+const backToVenues = document.getElementById("backToVenues");
+const backToRaces  = document.getElementById("backToRaces");
+
+const refreshBtn   = document.getElementById("refreshBtn");
 
 /* =========================
    初期化
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-  // ★ 初期画面を必ず24場にする
-  showScreen("screen-venues");
-
   renderDate();
-  bindVenueCards();
+  renderVenues();
   bindHeader();
 });
 
@@ -29,70 +44,77 @@ function renderDate() {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
-  document.getElementById("dateLabel").textContent = `${y}/${m}/${day}`;
-}
-
-/* =========================
-   24場 固定雛型（生成しない）
-========================= */
-function bindVenueCards() {
-  const cards = document.querySelectorAll(".venue-card");
-  if (!cards.length) return;
-
-  cards.forEach((card, i) => {
-    card.classList.add("clickable");
-    card.onclick = () => openRaces(i + 1);
-  });
+  dateLabel.textContent = `${y}/${m}/${day}`;
 }
 
 /* =========================
    ヘッダー
 ========================= */
 function bindHeader() {
-  const refresh = document.getElementById("refreshBtn");
-  if (refresh) refresh.onclick = () => location.reload();
+  refreshBtn.onclick = () => location.reload();
+}
+
+/* =========================
+   画面切替
+========================= */
+function showScreen(target) {
+  [screenVenues, screenRaces, screenDetail].forEach(s =>
+    s.classList.remove("active")
+  );
+  target.classList.add("active");
+}
+
+/* =========================
+   24場 固定雛型
+========================= */
+function renderVenues() {
+  venuesGrid.innerHTML = "";
+
+  for (let i = 1; i <= 24; i++) {
+    const card = document.createElement("div");
+    card.className = "venue-card clickable";
+    card.innerHTML = `
+      <div class="v-name">第${i}場</div>
+      <div class="v-status">開催中</div>
+      <div class="v-rate">表示</div>
+    `;
+    card.onclick = () => openVenue(i);
+    venuesGrid.appendChild(card);
+  }
 }
 
 /* =========================
    レース一覧
 ========================= */
-function openRaces(venue) {
-  currentVenue = venue;
-  showScreen("screen-races");
-
-  document.getElementById("venueTitle").textContent = `第${venue}場`;
-
-  const grid = document.getElementById("racesGrid");
-  grid.innerHTML = "";
+function openVenue(venue) {
+  venueTitle.textContent = `第${venue}場`;
+  racesGrid.innerHTML = "";
 
   for (let r = 1; r <= 12; r++) {
     const btn = document.createElement("div");
     btn.className = "race-btn";
     btn.textContent = `${r}R`;
-    btn.onclick = () => openRaceDetail(r);
-    grid.appendChild(btn);
+    btn.onclick = () => openRaceDetail(venue, r);
+    racesGrid.appendChild(btn);
   }
 
-  document.getElementById("backToVenues").onclick = () =>
-    showScreen("screen-venues");
+  backToVenues.onclick = () => showScreen(screenVenues);
+  showScreen(screenRaces);
 }
 
 /* =========================
    出走表画面
 ========================= */
-function openRaceDetail(race) {
-  currentRace = race;
-  showScreen("screen-detail");
-
-  document.getElementById(
-    "raceTitle"
-  ).textContent = `第${currentVenue}場 ${race}R`;
+function openRaceDetail(venue, race) {
+  raceTitle.textContent = `第${venue}場 ${race}R`;
 
   renderEntryTable();
+  renderAI();
+  renderComments();
   renderArrivalRateAnalysis();
 
-  document.getElementById("backToRaces").onclick = () =>
-    showScreen("screen-races");
+  backToRaces.onclick = () => showScreen(screenRaces);
+  showScreen(screenDetail);
 }
 
 /* =========================
@@ -100,22 +122,28 @@ function openRaceDetail(race) {
 ========================= */
 function renderEntryTable() {
   const tbody = document.querySelector("#entryTable tbody");
-  if (!tbody) return;
-
   tbody.innerHTML = "";
 
-  LANES.forEach((lane) => {
+  LANES.forEach(lane => {
+    const fCount = lane === 1 ? 1 : 0;
+    const fText  = fCount === 0 ? "ー" : fCount;
+
     const tr = document.createElement("tr");
     tr.className = `row-${lane}`;
-
     tr.innerHTML = `
       <td>${lane}</td>
-      <td>A1</td>
-      <td>ー</td>
-      <td>${rand()}%</td>
-      <td>${rand()}%</td>
-      <td>${rand()}%</td>
-      <td>${rand()}%</td>
+      <td>
+        <div class="entry-left">
+          <div class="klass">A1</div>
+          <div class="name">選手${lane}</div>
+          <div class="st">ST 0.${10 + lane}</div>
+        </div>
+      </td>
+      <td>${fText}</td>
+      <td>${rand(40,70)}%</td>
+      <td>${rand(35,65)}%</td>
+      <td>${rand(30,60)}%</td>
+      <td>${rand(30,60)}%</td>
       <td class="eval-mark">◎</td>
     `;
     tbody.appendChild(tr);
@@ -123,53 +151,90 @@ function renderEntryTable() {
 }
 
 /* =========================
-   入着率分析（横棒グラフ・正解仕様）
+   AI予想
 ========================= */
-function renderArrivalRateAnalysis() {
-  const card = document
-    .getElementById("rankingTable")
-    ?.closest(".card");
-  if (!card) return;
+function renderAI() {
+  const ai = generateAIPrediction({});
 
-  card.querySelector(".h3").textContent = "入着率分析";
+  fillPrediction("aiMain", ai.main);
+  fillPrediction("aiSub", ai.sub);
+}
 
-  const tbody = card.querySelector("tbody");
+function fillPrediction(id, rows) {
+  const tbody = document.querySelector(`#${id} tbody`);
+  tbody.innerHTML = "";
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${r.bet}</td><td>${r.prob}%</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* =========================
+   コメント
+========================= */
+function renderComments() {
+  const tbody = document.querySelector("#commentTable tbody");
   tbody.innerHTML = "";
 
-  LANES.forEach((lane) => {
-    const value = calcExpectation(lane);
-
+  LANES.forEach(lane => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${lane}</td>
-      <td>
-        <div class="bar-bg">
-          <div class="bar lane-${lane}" style="width:${value}%"></div>
-        </div>
-      </td>
-      <td>${value}%</td>
+      <td>スタート安定。展開有利。</td>
     `;
     tbody.appendChild(tr);
   });
 }
 
 /* =========================
-   Utils
+   入着率分析（横棒グラフ）
+   ※ rankingTable を再利用
 ========================= */
-function calcExpectation(lane) {
-  return Math.max(20, 85 - lane * 9);
-}
+function renderArrivalRateAnalysis() {
+  const card = document
+    .getElementById("rankingTable")
+    .closest(".card");
 
-function rand() {
-  return Math.floor(Math.random() * 40) + 30;
+  card.querySelector(".h3").textContent = "コース別 入着率分析";
+
+  const thead = card.querySelector("thead");
+  thead.innerHTML = `
+    <tr>
+      <th>艇</th>
+      <th>入着率</th>
+      <th>期待値</th>
+    </tr>
+  `;
+
+  const tbody = card.querySelector("tbody");
+  tbody.innerHTML = "";
+
+  LANES.forEach(lane => {
+    const value = calcExpectation(lane);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td style="font-weight:900;">${lane}</td>
+      <td>
+        <div style="width:100%;height:14px;background:#e5e7eb;">
+          <div class="analysis-bar row-${lane}"
+               style="width:${value}%;height:14px;"></div>
+        </div>
+      </td>
+      <td style="font-weight:900;">${value}%</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 /* =========================
-   画面切替（唯一の正解）
+   Utility
 ========================= */
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach((s) =>
-    s.classList.remove("active")
-  );
-  document.getElementById(id).classList.add("active");
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function calcExpectation(lane) {
+  return Math.max(20, 85 - lane * 9);
 }
