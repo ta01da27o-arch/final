@@ -1,5 +1,5 @@
 /* =================================================
-   app.js（24場配色 完全復活・完成版）
+   app.js（24場タップ完全対応／Edge・Chrome対応）
 ================================================= */
 
 import { generateAIPrediction } from "./ai_engine.js";
@@ -20,11 +20,11 @@ const LANES = [1,2,3,4,5,6];
 /* =========================
    DOM
 ========================= */
-const dateLabel = document.getElementById("dateLabel");
-const venuesGrid = document.getElementById("venuesGrid");
-const racesGrid  = document.getElementById("racesGrid");
-const venueTitle = document.getElementById("venueTitle");
-const raceTitle  = document.getElementById("raceTitle");
+const dateLabel   = document.getElementById("dateLabel");
+const venuesGrid  = document.getElementById("venuesGrid");
+const racesGrid   = document.getElementById("racesGrid");
+const venueTitle  = document.getElementById("venueTitle");
+const raceTitle   = document.getElementById("raceTitle");
 
 const screenVenues = document.getElementById("screen-venues");
 const screenRaces  = document.getElementById("screen-races");
@@ -40,7 +40,7 @@ const refreshBtn   = document.getElementById("refreshBtn");
 document.addEventListener("DOMContentLoaded", () => {
   renderDate();
   renderVenues();
-  refreshBtn.onclick = () => location.reload();
+  refreshBtn.addEventListener("click", ()=>location.reload());
 });
 
 /* =========================
@@ -61,7 +61,7 @@ function showScreen(target){
 }
 
 /* =========================
-   24場 固定雛型（配色完全対応）
+   24場 固定雛型（クリック完全対応）
 ========================= */
 function renderVenues(){
   venuesGrid.innerHTML = "";
@@ -69,8 +69,10 @@ function renderVenues(){
   VENUES.forEach((name, i)=>{
     const no = String(i+1).padStart(2,"0");
 
-    const card = document.createElement("div");
-    card.className = `venue-card clickable venue-${no}`;
+    // ★ div → button に変更（最重要）
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = `venue-card venue-${no}`;
 
     card.innerHTML = `
       <div class="v-name">${name}</div>
@@ -78,7 +80,11 @@ function renderVenues(){
       <div class="v-rate">確認</div>
     `;
 
-    card.onclick = ()=>openVenue(i+1, name);
+    // ★ onclick ではなく addEventListener
+    card.addEventListener("click", ()=>{
+      openVenue(i+1, name);
+    });
+
     venuesGrid.appendChild(card);
   });
 }
@@ -90,15 +96,23 @@ function openVenue(no, name){
   venueTitle.textContent = name;
   racesGrid.innerHTML = "";
 
-  for(let r=1;r<=12;r++){
+  for(let r=1; r<=12; r++){
     const btn = document.createElement("button");
+    btn.type = "button";
     btn.className = "race-btn";
     btn.textContent = `${r}R`;
-    btn.onclick = ()=>openRace(no, name, r);
+
+    btn.addEventListener("click", ()=>{
+      openRace(no, name, r);
+    });
+
     racesGrid.appendChild(btn);
   }
 
-  backToVenues.onclick = ()=>showScreen(screenVenues);
+  backToVenues.addEventListener("click", ()=>{
+    showScreen(screenVenues);
+  }, { once:true });
+
   showScreen(screenRaces);
 }
 
@@ -107,12 +121,16 @@ function openVenue(no, name){
 ========================= */
 function openRace(vNo, vName, race){
   raceTitle.textContent = `${vName} ${race}R`;
+
   renderEntryTable();
   renderAI();
   renderComments();
   renderArrivalRateAnalysis();
 
-  backToRaces.onclick = ()=>showScreen(screenRaces);
+  backToRaces.addEventListener("click", ()=>{
+    showScreen(screenRaces);
+  }, { once:true });
+
   showScreen(screenDetail);
 }
 
@@ -124,9 +142,9 @@ function renderEntryTable(){
   tbody.innerHTML = "";
 
   LANES.forEach(lane=>{
-    const f = lane===1 ? "1" : "ー";
     const tr = document.createElement("tr");
     tr.className = `row-${lane}`;
+
     tr.innerHTML = `
       <td>${lane}</td>
       <td>
@@ -136,7 +154,7 @@ function renderEntryTable(){
           <div class="st">ST 0.${10+lane}</div>
         </div>
       </td>
-      <td>${f}</td>
+      <td>${lane===1?"1":"ー"}</td>
       <td>${rand(40,70)}%</td>
       <td>${rand(35,65)}%</td>
       <td>${rand(30,60)}%</td>
@@ -152,15 +170,16 @@ function renderEntryTable(){
 ========================= */
 function renderAI(){
   const ai = generateAIPrediction({});
-  fill("aiMain", ai.main);
-  fill("aiSub", ai.sub);
+  fillAI("aiMain", ai.main);
+  fillAI("aiSub", ai.sub);
 }
-function fill(id, rows){
+
+function fillAI(id, rows){
   const tb = document.querySelector(`#${id} tbody`);
-  tb.innerHTML="";
+  tb.innerHTML = "";
   rows.forEach(r=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${r.bet}</td><td>${r.prob}%</td>`;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${r.bet}</td><td>${r.prob}%</td>`;
     tb.appendChild(tr);
   });
 }
@@ -169,11 +188,11 @@ function fill(id, rows){
    コメント
 ========================= */
 function renderComments(){
-  const tb=document.querySelector("#commentTable tbody");
-  tb.innerHTML="";
+  const tb = document.querySelector("#commentTable tbody");
+  tb.innerHTML = "";
   LANES.forEach(l=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${l}</td><td>スタート安定。展開有利。</td>`;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${l}</td><td>スタート安定。展開有利。</td>`;
     tb.appendChild(tr);
   });
 }
@@ -182,19 +201,19 @@ function renderComments(){
    入着率分析（横棒）
 ========================= */
 function renderArrivalRateAnalysis(){
-  const card=document.getElementById("rankingTable").closest(".card");
-  card.querySelector(".h3").textContent="コース別 入着率分析";
+  const card = document.getElementById("rankingTable").closest(".card");
+  card.querySelector(".h3").textContent = "コース別 入着率分析";
 
-  const thead=card.querySelector("thead");
-  thead.innerHTML=`<tr><th>艇</th><th>入着率</th><th>期待値</th></tr>`;
+  card.querySelector("thead").innerHTML =
+    `<tr><th>艇</th><th>入着率</th><th>期待値</th></tr>`;
 
-  const tbody=card.querySelector("tbody");
-  tbody.innerHTML="";
+  const tbody = card.querySelector("tbody");
+  tbody.innerHTML = "";
 
   LANES.forEach(l=>{
-    const v=calc(l);
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
+    const v = calc(l);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
       <td>${l}</td>
       <td>
         <div class="analysis-bar-bg">
@@ -208,7 +227,7 @@ function renderArrivalRateAnalysis(){
 }
 
 /* =========================
-   Util
+   util
 ========================= */
-const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const calc=l=>Math.max(20,85-l*9);
+const rand = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const calc = l=>Math.max(20,85-l*9);
